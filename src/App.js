@@ -1,56 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Switch, Route, Redirect, useHistory } from "react-router-dom";
+import "./App.css";
+import LoginForm from "./components/LoginForm";
+import RegisterForm from "./components/RegisterForm";
+
+import { fetchCurrentUser, logoutUser, selectUser } from "./slices/userSlice";
 
 function App() {
+  const dispatch = useDispatch();
+  // const history = useHistory();
+
+  const user = useSelector(selectUser);
+
+  useEffect(() => {
+    dispatch(fetchCurrentUser());
+  }, [dispatch]);
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  };
+
+  let content;
+  if (user.status === "loading") {
+    content = "Loading...";
+  } else if (!user.data) {
+    content = <Redirect to="login" />;
+  } else {
+    content = (
+      <>
+        <h1>Hello {user.data.firstName}! :)</h1>
+        <button type="button" onClick={handleLogout}>
+          Logout
+        </button>
+      </>
+    );
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+      <Switch>
+        <Route exact path="/">
+          {content}
+        </Route>
+        <Route exact path="/login" component={LoginForm} />
+        <Route exact path="/register" component={RegisterForm} />
+      </Switch>
     </div>
   );
 }
