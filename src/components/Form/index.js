@@ -6,10 +6,13 @@ const StyledForm = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 1rem;
+  width: 600px;
+  padding: 2rem;
 `;
 
-const Form = ({ handleSubmit, component }) => {
-  return <StyledForm onSubmit={handleSubmit}>{component}</StyledForm>;
+const Form = ({ onSubmit, children }) => {
+  return <StyledForm onSubmit={onSubmit}>{children}</StyledForm>;
 };
 
 export default Form;

@@ -1,90 +1,94 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
+import useForm from "../../hooks/useForm";
 import { registerUser } from "../../slices/userSlice";
+import { PrimaryButton } from "../Button";
+import Container from "../Container";
 import Form from "../Form";
 import Input from "../Input";
 
 const RegisterForm = () => {
-  const [form, setForm] = useState({});
+  const [{ formValues, setFormValues, isLoading }, handleChange, handleSubmit] =
+    useForm();
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const handleChange = (evt) =>
-    setForm({ ...form, [evt.target.name]: evt.target.value });
-
-  const handleLogin = async (evt) => {
-    evt.preventDefault();
-    if (form.password === form.confirmPassword) {
+  const register = () => {
+    if (formValues.password === formValues.confirmPassword) {
       // todo: remove confirmPassword from object
-      dispatch(registerUser(form));
+      dispatch(registerUser(formValues));
       history.push("/");
     }
-    setForm({});
+    setFormValues({});
   };
 
   return (
-    <>
-      <Form
-        handleSubmit={handleLogin}
-        component={
-          <>
-            <Input
-              type="text"
-              labelText="Username"
-              placeholder="caioba"
-              name="username"
-              onChange={handleChange}
-            />
-            <Input
-              type="password"
-              labelText="Password"
-              placeholder="123"
-              name="password"
-              onChange={handleChange}
-            />
-            <Input
-              type="password"
-              labelText="Confirm Password"
-              placeholder="123"
-              name="confirmPassword"
-              onChange={handleChange}
-            />
-            <Input
-              type="text"
-              labelText="First Name"
-              placeholder="Caio"
-              name="firstName"
-              onChange={handleChange}
-            />
-            <Input
-              type="text"
-              labelText="Last Name"
-              placeholder="Caiobus"
-              name="lastName"
-              onChange={handleChange}
-            />
-            <Input
-              type="email"
-              labelText="Email"
-              placeholder="caioba@ca.io"
-              name="email"
-              onChange={handleChange}
-            />
-            <Input
-              type="date"
-              labelText="Birthday"
-              name="birthday"
-              onChange={handleChange}
-            />
-            <button type="submit">Register</button>
-          </>
-        }
-      />
+    <Container>
+      <Form onSubmit={handleSubmit(register)}>
+        <Input
+          type="text"
+          labelText="Username"
+          placeholder="caioba"
+          name="username"
+          onChange={handleChange}
+          value={formValues.username}
+        />
+        <Input
+          type="password"
+          labelText="Password"
+          placeholder="123"
+          name="password"
+          onChange={handleChange}
+          value={formValues.password}
+        />
+        <Input
+          type="password"
+          labelText="Confirm Password"
+          placeholder="123"
+          name="confirmPassword"
+          onChange={handleChange}
+          value={formValues.confirmPassword}
+        />
+        <Input
+          type="text"
+          labelText="First Name"
+          placeholder="Caio"
+          name="firstName"
+          onChange={handleChange}
+          value={formValues.firstName}
+        />
+        <Input
+          type="text"
+          labelText="Last Name"
+          placeholder="Caiobus"
+          name="lastName"
+          onChange={handleChange}
+          value={formValues.lastName}
+        />
+        <Input
+          type="email"
+          labelText="Email"
+          placeholder="caioba@ca.io"
+          name="email"
+          onChange={handleChange}
+          value={formValues.email}
+        />
+        <Input
+          type="date"
+          labelText="Birthday"
+          name="birthday"
+          onChange={handleChange}
+          value={formValues.birthday}
+        />
+        <PrimaryButton type="submit" disabled={isLoading} stretch>
+          Register
+        </PrimaryButton>
+      </Form>
       <p>
         Already have an account? <Link to="/login">Log in</Link>.
       </p>
-    </>
+    </Container>
   );
 };
 

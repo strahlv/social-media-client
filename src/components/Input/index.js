@@ -1,18 +1,30 @@
 import React from "react";
+import { InputWrapper, StyledInput, StyledLabel } from "./style";
 
-const Input = ({ type, labelText, name, onChange, placeholder }) => {
+const Input = ({
+  labelText,
+  type,
+  name,
+  placeholder,
+  required = false,
+  autoComplete = true,
+  onChange,
+  value,
+}) => {
   return (
-    <>
-      <label htmlFor={name}>{labelText}</label>
-      <input
+    <InputWrapper>
+      <StyledLabel htmlFor={name}>{labelText}</StyledLabel>
+      <StyledInput
         type={type}
         name={name}
         id={name}
-        onChange={onChange}
         placeholder={placeholder}
-        required
+        required={required}
+        autoComplete={autoComplete}
+        onChange={onChange}
+        value={value}
       />
-    </>
+    </InputWrapper>
   );
 };
 

@@ -1,53 +1,61 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
+import useForm from "../../hooks/useForm";
 
 import { loginUser } from "../../slices/userSlice";
+import { PrimaryButton } from "../Button";
+import Container from "../Container";
 import Form from "../Form";
 import Input from "../Input";
 
 const LoginForm = () => {
-  const [form, setForm] = useState({});
+  const [{ formValues, isLoading }, handleChange, handleSubmit] = useForm();
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const handleChange = (evt) =>
-    setForm({ ...form, [evt.target.name]: evt.target.value });
-
-  const handleLogin = async (evt) => {
-    evt.preventDefault();
-    dispatch(loginUser({ username: form.username, password: form.password }));
+  const login = () => {
+    dispatch(
+      loginUser({
+        username: formValues.username,
+        password: formValues.password,
+      })
+    );
     history.push("/");
   };
 
   return (
-    <>
-      <Form
-        handleSubmit={handleLogin}
-        component={
-          <>
-            <Input
-              type="text"
-              labelText="Username"
-              placeholder="caioba"
-              name="username"
-              onChange={handleChange}
-            />
-            <Input
-              type="password"
-              labelText="Password"
-              placeholder="123"
-              name="password"
-              onChange={handleChange}
-            />
-            <button type="submit">Login</button>
-          </>
-        }
-      />
+    <Container>
+      <Form onSubmit={handleSubmit(login)}>
+        <Input
+          type="text"
+          labelText="Username"
+          placeholder="caioba"
+          name="username"
+          onChange={handleChange}
+          value={formValues.username}
+        />
+        <Input
+          type="password"
+          labelText="Password"
+          placeholder="123"
+          name="password"
+          onChange={handleChange}
+          value={formValues.password}
+        />
+        <PrimaryButton
+          type="submit"
+          disabled={isLoading}
+          stretch
+          color="secondaryAccent"
+        >
+          Login
+        </PrimaryButton>
+      </Form>
       <p>
         Doesn't have an account? <Link to="/register">Register now</Link>.
       </p>
-    </>
+    </Container>
   );
 };
 
