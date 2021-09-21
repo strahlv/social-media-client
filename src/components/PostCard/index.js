@@ -1,42 +1,64 @@
 import React from "react";
 import styled from "styled-components";
+import {
+  FaComment,
+  FaEllipsisV,
+  FaThumbsDown,
+  FaThumbsUp,
+} from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { dislikePost, likePost } from "../../slices/postsSlice";
 
 const StyledItem = styled.li`
   padding: 1rem 2rem;
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
+  background: var(--clr-light);
   color: var(--clr-dark);
   border-radius: 5px;
-  box-shadow: 5px 5px var(--clr-primary-accent),
-    -10px -10px 20px 10px var(--clr-secondary-light),
-    10px 10px 20px 10px var(--clr-primary-light);
+  border: 1px solid var(--clr-primary);
+  box-shadow: 5px 5px var(--clr-primary);
 
-  &:nth-child(1) {
-    box-shadow: 5px 5px var(--clr-secondary-accent),
-      -10px -10px 20px 10px var(--clr-primary-light),
-      10px 10px 20px 10px var(--clr-secondary-light);
+  & header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
   }
 
   & h2 {
     font-size: 2rem;
     font-weight: bold;
-    text-decoration: underline wavy var(--clr-secondary-accent);
-    margin-bottom: 2rem;
+    text-decoration: underline wavy var(--clr-secondary);
   }
 
-  &:nth-child(1) h2 {
-    text-decoration-color: var(--clr-primary-accent);
+  & h3 {
+    color: var(--clr-secondary-accent);
+    font-style: italic;
+    font-size: 0.8rem;
+    margin-bottom: 3rem;
   }
 
-  & div {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 2rem;
+  &:hover {
+    border: 1px solid var(--clr-secondary);
+    box-shadow: 5px 5px var(--clr-secondary);
+  }
+
+  & p {
+    margin-bottom: 3rem;
   }
 `;
 
-const StyledTag = styled.span`
+const TagList = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+`;
+
+const StyledTag = styled.li`
   border-radius: 1rem;
   border: 1px solid var(--clr-secondary-accent);
   color: var(--clr-secondary-accent);
@@ -49,14 +71,106 @@ const StyledTag = styled.span`
   }
 `;
 
+const DotMenu = styled.div`
+  height: 32px;
+  flex: 0 0 32px;
+  align-self: flex-start;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--clr-primary-light);
+  }
+`;
+
+const ReactionsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+`;
+
+const StyledReactionButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background: var(--clr-light);
+  color: var(--clr-dark);
+  border: 1px solid var(--clr-primary-light);
+  border-radius: 2rem;
+  font-family: var(--font-poppins);
+  font-size: 1rem;
+
+  &:hover {
+    background-color: var(--clr-primary-light);
+  }
+`;
+
+const ReactionButton = ({ icon, value, onClick }) => {
+  return (
+    <StyledReactionButton onClick={onClick}>
+      {icon}
+      {value}
+    </StyledReactionButton>
+  );
+};
+
 const PostCard = ({ postData }) => {
-  const tags = postData.tags.map((tag) => <StyledTag>{tag}</StyledTag>);
+  const dispatch = useDispatch();
+
+  // Format tags
+  const tags = postData.tags.map((tag, index) => (
+    <StyledTag key={index}>#{tag}</StyledTag>
+  ));
+
+  const handleLike = () => {
+    console.log("Liked");
+    dispatch(likePost(postData._id));
+  };
+
+  const handleDislike = () => {
+    console.log("Disliked");
+    dispatch(dislikePost(postData._id));
+  };
+
+  const handleComment = () => {
+    console.log("Commented");
+  };
 
   return (
-    <StyledItem key={postData._id}>
-      <h2>{postData.title}</h2>
+    <StyledItem>
+      <header>
+        <h2>{postData.title}</h2>
+        <DotMenu>
+          <FaEllipsisV />
+        </DotMenu>
+      </header>
+      <h3>
+        by {postData.author.fullName}, {postData.age}
+      </h3>
       <p>{postData.body}</p>
-      <div>{tags}</div>
+      <TagList>{tags}</TagList>
+      <ReactionsWrapper>
+        <ReactionButton
+          icon={<FaThumbsUp />}
+          value={postData.likeCount}
+          onClick={handleLike}
+        />
+        <ReactionButton
+          icon={<FaThumbsDown />}
+          value={postData.dislikeCount}
+          onClick={handleDislike}
+        />
+        <ReactionButton
+          icon={<FaComment />}
+          value={postData.commentCount}
+          onClick={handleComment}
+        />
+      </ReactionsWrapper>
     </StyledItem>
   );
 };

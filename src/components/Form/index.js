@@ -7,8 +7,8 @@ const StyledForm = styled.form`
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  width: 600px;
-  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
 `;
 
 const Form = ({ onSubmit, children }) => {

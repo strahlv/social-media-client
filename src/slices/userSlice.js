@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchAuthenticatedUser, login, logout, register } from "../api";
+import * as api from "../api";
 
 const initialState = {
   data: null,
@@ -7,31 +7,27 @@ const initialState = {
   error: null,
 };
 
-export const fetchCurrentUser = createAsyncThunk("user/fetchUser", async () => {
-  const res = await fetchAuthenticatedUser();
-  console.log(res.data);
+export const fetchAuthenticatedUser = createAsyncThunk(
+  "user/fetchAuthenticatedUser",
+  async () => {
+    const res = await api.fetchAuthenticatedUser();
+    return res.data;
+  }
+);
+
+export const login = createAsyncThunk("user/login", async (credentials) => {
+  const res = await api.login(credentials);
   return res.data;
 });
 
-export const loginUser = createAsyncThunk(
-  "user/loginUser",
-  async (credentials) => {
-    const res = await login(credentials);
-    return res.data;
-  }
-);
-
-export const logoutUser = createAsyncThunk("user/logoutUser", async () => {
-  await logout();
+export const logout = createAsyncThunk("user/logout", async () => {
+  await api.logout();
 });
 
-export const registerUser = createAsyncThunk(
-  "user/registerUser",
-  async (newUser) => {
-    const res = await register(newUser);
-    return res.data;
-  }
-);
+export const register = createAsyncThunk("user/register", async (newUser) => {
+  const res = await api.register(newUser);
+  return res.data;
+});
 
 export const userSlice = createSlice({
   name: "user",
@@ -39,47 +35,47 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(fetchCurrentUser.pending, (state, action) => {
+      .addCase(fetchAuthenticatedUser.pending, (state, action) => {
         state.status = "loading";
       })
-      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+      .addCase(fetchAuthenticatedUser.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = action.payload;
       })
-      .addCase(fetchCurrentUser.rejected, (state, action) => {
+      .addCase(fetchAuthenticatedUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })
-      .addCase(loginUser.pending, (state, action) => {
+      .addCase(login.pending, (state, action) => {
         state.status = "loading";
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(login.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = action.payload;
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(login.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })
-      .addCase(logoutUser.pending, (state, action) => {
+      .addCase(logout.pending, (state, action) => {
         state.status = "loading";
       })
-      .addCase(logoutUser.fulfilled, (state, action) => {
+      .addCase(logout.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = null;
       })
-      .addCase(logoutUser.rejected, (state, action) => {
+      .addCase(logout.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })
-      .addCase(registerUser.pending, (state, action) => {
+      .addCase(register.pending, (state, action) => {
         state.status = "loading";
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(register.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = action.payload;
       })
-      .addCase(registerUser.rejected, (state, action) => {
+      .addCase(register.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });

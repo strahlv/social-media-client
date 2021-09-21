@@ -2,8 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import useForm from "../../hooks/useForm";
-
-import { loginUser } from "../../slices/userSlice";
+import { login } from "../../slices/userSlice";
 import { PrimaryButton } from "../Button";
 import Container from "../Container";
 import Form from "../Form";
@@ -14,9 +13,9 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const login = () => {
+  const handleLogin = () => {
     dispatch(
-      loginUser({
+      login({
         username: formValues.username,
         password: formValues.password,
       })
@@ -26,7 +25,7 @@ const LoginForm = () => {
 
   return (
     <Container>
-      <Form onSubmit={handleSubmit(login)}>
+      <Form onSubmit={handleSubmit(handleLogin)}>
         <Input
           type="text"
           labelText="Username"

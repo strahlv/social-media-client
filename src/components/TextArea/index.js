@@ -10,10 +10,16 @@ const StyledTextArea = styled.textarea`
   padding: 0.5rem 1rem;
 `;
 
-const TextArea = ({ children }) => {
+const TextArea = ({ name, onChange, value }) => {
   return (
-    <StyledTextArea autoComplete="off" rows={5}>
-      {children}
+    <StyledTextArea
+      name={name}
+      id={name}
+      autoComplete="off"
+      rows={5}
+      onChange={onChange}
+    >
+      {value}
     </StyledTextArea>
   );
 };

@@ -7,7 +7,7 @@ const Input = ({
   name,
   placeholder,
   required = false,
-  autoComplete = true,
+  autoComplete = "on",
   onChange,
   value,
 }) => {

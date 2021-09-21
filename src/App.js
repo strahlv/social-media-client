@@ -5,7 +5,7 @@ import HomePage from "./components/HomePage";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 
-import { fetchCurrentUser, selectUser } from "./slices/userSlice";
+import { fetchAuthenticatedUser, selectUser } from "./slices/userSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -14,7 +14,7 @@ function App() {
 
   useEffect(() => {
     if (!user.data) {
-      dispatch(fetchCurrentUser());
+      dispatch(fetchAuthenticatedUser());
     }
   }, [dispatch, user.data]);
 

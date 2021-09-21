@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import useForm from "../../hooks/useForm";
-import { registerUser } from "../../slices/userSlice";
+import { register } from "../../slices/userSlice";
 import { PrimaryButton } from "../Button";
 import Container from "../Container";
 import Form from "../Form";
@@ -14,10 +14,10 @@ const RegisterForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const register = () => {
+  const handleRegister = () => {
     if (formValues.password === formValues.confirmPassword) {
       // todo: remove confirmPassword from object
-      dispatch(registerUser(formValues));
+      dispatch(register(formValues));
       history.push("/");
     }
     setFormValues({});
@@ -25,7 +25,7 @@ const RegisterForm = () => {
 
   return (
     <Container>
-      <Form onSubmit={handleSubmit(register)}>
+      <Form onSubmit={handleSubmit(handleRegister)}>
         <Input
           type="text"
           labelText="Username"

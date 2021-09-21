@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import useForm from "../../hooks/useForm";
+import { createPost } from "../../slices/postsSlice";
 import { SecondaryButton } from "../Button";
 import Form from "../Form";
 import Input from "../Input";
@@ -12,15 +13,15 @@ const PostForm = () => {
   const [{ formValues, setFormValues, isLoading }, handleChange, handleSubmit] =
     useForm();
 
-  const createPost = () => {
+  const handleCreatePost = () => {
     const newPost = { ...formValues };
-    newPost.tags = newPost.tags.split(" ");
-    // api.createPost(newPost)
+    newPost.tags = newPost.tags?.split(" ");
+    dispatch(createPost(newPost));
     setFormValues({ title: "", body: "", tags: "" });
   };
 
   return (
-    <Form onSubmit={handleSubmit(createPost)}>
+    <Form onSubmit={handleSubmit(handleCreatePost)}>
       <Input
         type="text"
         name="title"
@@ -37,7 +38,7 @@ const PostForm = () => {
         required
         onChange={handleChange}
         value={formValues.body}
-      ></TextArea>
+      />
       <Input
         type="text"
         name="tags"

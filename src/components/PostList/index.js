@@ -8,15 +8,17 @@ const StyledList = styled.ul`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 5rem;
+  gap: 2rem;
+  margin-top: 3rem;
 `;
 
 const PostList = ({ posts }) => {
   let items = <LoadingSpinner />;
 
-  if (posts.length) {
+  if (posts) {
+    console.log("posts:", posts);
     items = posts.map((post) => {
-      return <PostCard postData={post} />;
+      return <PostCard key={post._id} postData={post} />;
     });
   }
 

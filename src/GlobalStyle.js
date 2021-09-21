@@ -49,6 +49,12 @@ footer, header, hgroup, menu, nav, section {
 body {
 	line-height: 1;
 	font-family: 'Poppins', sans-serif;
+	background-color: var(--clr-primary-dark);
+	background: linear-gradient(
+    45deg,
+    var(--clr-primary) 0%,
+    var(--clr-secondary) 100%
+  );
 }
 ol, ul {
 	list-style: none;

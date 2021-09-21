@@ -1,7 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { logoutUser } from "../../slices/userSlice";
+import { postsCleared } from "../../slices/postsSlice";
+import { logout } from "../../slices/userSlice";
 import { SecondaryLightButton } from "../Button";
 
 const NavWrapper = styled.div`
@@ -28,7 +29,8 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    dispatch(logoutUser());
+    dispatch(postsCleared());
+    dispatch(logout());
   };
 
   return (
