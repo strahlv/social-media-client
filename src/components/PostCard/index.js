@@ -1,177 +1,275 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
+import OutsideClickHandler from "react-outside-click-handler";
 import {
   FaComment,
+  FaEdit,
   FaEllipsisV,
   FaThumbsDown,
   FaThumbsUp,
+  FaTrash,
 } from "react-icons/fa";
-import { useDispatch } from "react-redux";
-import { dislikePost, likePost } from "../../slices/postsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  dislikePost,
+  likePost,
+  deletePost,
+  selectPostById,
+  updatePost,
+  createComment,
+} from "../../slices/postsSlice";
+import { Menu, MenuItem, MenuItemDanger } from "../Menu";
+import Form from "../Form";
+import Input from "../Input";
+import TextArea from "../TextArea";
+import { IconButton, PrimaryAccentButton, PrimaryButton } from "../Button";
+import useForm from "../../hooks/useForm";
+import { FlexRow } from "../Layout";
+import {
+  CommentFormWrapper,
+  PostAuthor,
+  PostBody,
+  PostHeader,
+  PostTitle,
+  ReactionsWrapper,
+  StyledCard,
+  StyledHighlightedReactionButton,
+  StyledReactionButton,
+  StyledTag,
+  TagList,
+} from "./style";
+import CommentList from "../CommentList";
+import { selectUser } from "../../slices/userSlice";
 
-const StyledItem = styled.li`
-  padding: 1rem 2rem;
-  width: 100%;
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-  background: var(--clr-light);
-  color: var(--clr-dark);
-  border-radius: 5px;
-  border: 1px solid var(--clr-primary);
-  box-shadow: 5px 5px var(--clr-primary);
-
-  & header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-
-  & h2 {
-    font-size: 2rem;
-    font-weight: bold;
-    text-decoration: underline wavy var(--clr-secondary);
-  }
-
-  & h3 {
-    color: var(--clr-secondary-accent);
-    font-style: italic;
-    font-size: 0.8rem;
-    margin-bottom: 3rem;
-  }
-
-  &:hover {
-    border: 1px solid var(--clr-secondary);
-    box-shadow: 5px 5px var(--clr-secondary);
-  }
-
-  & p {
-    margin-bottom: 3rem;
-  }
-`;
-
-const TagList = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-`;
-
-const StyledTag = styled.li`
-  border-radius: 1rem;
-  border: 1px solid var(--clr-secondary-accent);
-  color: var(--clr-secondary-accent);
-  padding: 0 5px;
-  cursor: pointer;
-
-  &:hover {
-    border: 1px solid var(--clr-primary-accent);
-    color: var(--clr-primary-accent);
-  }
-`;
-
-const DotMenu = styled.div`
-  height: 32px;
-  flex: 0 0 32px;
-  align-self: flex-start;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  cursor: pointer;
-
-  &:hover {
-    background: var(--clr-primary-light);
-  }
-`;
-
-const ReactionsWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-`;
-
-const StyledReactionButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  background: var(--clr-light);
-  color: var(--clr-dark);
-  border: 1px solid var(--clr-primary-light);
-  border-radius: 2rem;
-  font-family: var(--font-poppins);
-  font-size: 1rem;
-
-  &:hover {
-    background-color: var(--clr-primary-light);
-  }
-`;
-
-const ReactionButton = ({ icon, value, onClick }) => {
-  return (
-    <StyledReactionButton onClick={onClick}>
+const ReactionButton = ({ icon, value, highlighted, onClick }) => {
+  const content = (
+    <>
       {icon}
       {value}
-    </StyledReactionButton>
+    </>
+  );
+  return highlighted ? (
+    <StyledHighlightedReactionButton onClick={onClick}>
+      {content}
+    </StyledHighlightedReactionButton>
+  ) : (
+    <StyledReactionButton onClick={onClick}>{content}</StyledReactionButton>
   );
 };
 
-const PostCard = ({ postData }) => {
+const PostCard = ({ postId }) => {
+  const [isMenuOpened, setIsMenuOpened] = useState(false);
+  const [cardState, setCardState] = useState("idle");
+
   const dispatch = useDispatch();
 
-  // Format tags
-  const tags = postData.tags.map((tag, index) => (
+  const [{ formValues, setFormValues, isLoading }, handleChange, handleSubmit] =
+    useForm();
+
+  const user = useSelector(selectUser);
+  const post = useSelector((state) => selectPostById(state, postId));
+  const postsState = useSelector((state) => state.posts);
+
+  const [isLiked, setIsLiked] = useState(
+    post.likes?.find((id) => id === user.data._id)
+  );
+
+  const [isDisliked, setIsDisliked] = useState(
+    post.dislikes?.find((id) => id === user.data._id)
+  );
+
+  const isAuthor = post.author._id === user.data._id;
+
+  // Voltar ao estado ocioso (idle) ao terminar de carregar uma requisição
+  if (postsState.status !== "loading" && cardState === "loading") {
+    setCardState("idle");
+  }
+
+  // Formata tags
+  const tags = post.tags.map((tag, index) => (
     <StyledTag key={index}>#{tag}</StyledTag>
   ));
 
   const handleLike = () => {
-    console.log("Liked");
-    dispatch(likePost(postData._id));
+    dispatch(likePost(post._id));
+    setIsLiked(!isLiked);
+    setIsDisliked(false);
   };
 
   const handleDislike = () => {
-    console.log("Disliked");
-    dispatch(dislikePost(postData._id));
+    dispatch(dislikePost(post._id));
+    setIsDisliked(!isDisliked);
+    setIsLiked(false);
   };
 
-  const handleComment = () => {
-    console.log("Commented");
+  const handleShowCommentForm = () => {
+    setCardState(cardState !== "commenting" && "commenting");
+    setFormValues({ body: "" });
   };
 
-  return (
-    <StyledItem>
-      <header>
-        <h2>{postData.title}</h2>
-        <DotMenu>
-          <FaEllipsisV />
-        </DotMenu>
-      </header>
-      <h3>
-        by {postData.author.fullName}, {postData.age}
-      </h3>
-      <p>{postData.body}</p>
+  const handleCreateComment = () => {
+    dispatch(createComment({ postId: post._id, newComment: formValues }));
+    setFormValues({});
+    setCardState("idle");
+  };
+
+  const handleToggleMenu = () => {
+    setIsMenuOpened(!isMenuOpened);
+  };
+
+  const handleOutsideClick = () => {
+    if (isMenuOpened) {
+      setIsMenuOpened(false);
+    }
+  };
+
+  const handleShowUpdateForm = () => {
+    setFormValues({
+      title: post.title,
+      body: post.body,
+      tags: post.tags.join(" "),
+    });
+    setCardState("editing");
+    setIsMenuOpened(false);
+  };
+
+  const handleUpdate = () => {
+    const updatedPost = {
+      ...formValues,
+      tags: formValues.tags?.trim().split(" "),
+    };
+    dispatch(updatePost({ postId: post._id, updatedPost }));
+    setCardState("loading");
+    setIsMenuOpened(false);
+  };
+
+  const handleDelete = () => {
+    dispatch(deletePost(post._id));
+    setCardState("loading");
+    setIsMenuOpened(false);
+  };
+
+  // **************************************
+  // COMMENT FORM
+  // **************************************
+  const commentForm = cardState === "commenting" && (
+    <CommentFormWrapper>
+      <Form onSubmit={handleSubmit(handleCreateComment)}>
+        <TextArea
+          required
+          name="body"
+          onChange={handleChange}
+          value={formValues.body}
+        />
+        <FlexRow>
+          <PrimaryButton type="submit" stretch>
+            Comment
+          </PrimaryButton>
+          <PrimaryAccentButton
+            type="button"
+            onClick={() => setCardState("idle")}
+            stretch
+          >
+            Cancel
+          </PrimaryAccentButton>
+        </FlexRow>
+      </Form>
+    </CommentFormWrapper>
+  );
+
+  // **************************************
+  // POST CONTENT
+  // **************************************
+  const postContent = (
+    <>
+      <PostHeader>
+        <PostTitle>{post.title}</PostTitle>
+        <OutsideClickHandler onOutsideClick={handleOutsideClick}>
+          <IconButton onClick={handleToggleMenu}>
+            <FaEllipsisV />
+          </IconButton>
+          <Menu visible={isMenuOpened}>
+            <MenuItem onClick={handleShowUpdateForm}>
+              <FaEdit /> Edit
+            </MenuItem>
+            <MenuItemDanger onClick={handleDelete}>
+              <FaTrash /> Delete
+            </MenuItemDanger>
+          </Menu>
+        </OutsideClickHandler>
+      </PostHeader>
+      <PostAuthor>
+        by {post.author.fullName}, {post.createdAge}
+      </PostAuthor>
+      <PostBody>{post.body}</PostBody>
       <TagList>{tags}</TagList>
       <ReactionsWrapper>
         <ReactionButton
           icon={<FaThumbsUp />}
-          value={postData.likeCount}
+          value={post.likeCount}
           onClick={handleLike}
+          highlighted={isLiked}
         />
         <ReactionButton
           icon={<FaThumbsDown />}
-          value={postData.dislikeCount}
+          value={post.dislikeCount}
           onClick={handleDislike}
+          highlighted={isDisliked}
         />
         <ReactionButton
           icon={<FaComment />}
-          value={postData.commentCount}
-          onClick={handleComment}
+          value={post.commentCount}
+          onClick={handleShowCommentForm}
         />
       </ReactionsWrapper>
-    </StyledItem>
+      {commentForm}
+      <CommentList comments={post.comments} postId={post._id} />
+    </>
+  );
+
+  // **************************************
+  // EDIT FORM
+  // **************************************
+  const editForm = (
+    <Form onSubmit={handleSubmit(handleUpdate)}>
+      <Input
+        type="text"
+        name="title"
+        labelText="Title"
+        required
+        onChange={handleChange}
+        value={formValues.title}
+        autoComplete="off"
+        variant="title"
+      />
+      <TextArea
+        name="body"
+        required
+        onChange={handleChange}
+        value={formValues.body}
+      />
+      <Input
+        type="text"
+        name="tags"
+        labelText="Tags"
+        onChange={handleChange}
+        value={formValues.tags}
+        autoComplete="off"
+      />
+      <FlexRow>
+        <PrimaryButton type="submit" disabled={isLoading} stretch>
+          Save
+        </PrimaryButton>
+        <PrimaryAccentButton onClick={() => setCardState("idle")} stretch>
+          Cancel
+        </PrimaryAccentButton>
+      </FlexRow>
+    </Form>
+  );
+
+  return (
+    <StyledCard state={cardState}>
+      {cardState === "editing" ? editForm : postContent}
+    </StyledCard>
   );
 };
 

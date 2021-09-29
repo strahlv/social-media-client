@@ -17,10 +17,16 @@ export const fetchUser = (id) => API.get(`${USERS_URL}/${id}`);
 // Posts
 export const fetchPosts = () => API.get(POSTS_URL);
 export const createPost = (newPost) => API.post(POSTS_URL, newPost);
-export const updatePost = (postId) => API.put(`${POSTS_URL}/${postId}`);
+export const fetchPost = (postId) => API.get(`${POSTS_URL}/${postId}`);
+export const updatePost = (postId, changes) =>
+  API.put(`${POSTS_URL}/${postId}`, changes);
 export const deletePost = (postId) => API.delete(`${POSTS_URL}/${postId}`);
 export const likePost = (postId) => API.patch(`${POSTS_URL}/${postId}/like`);
 export const dislikePost = (postId) =>
   API.patch(`${POSTS_URL}/${postId}/dislike`);
 
 // Comments
+export const createComment = (postId, newComment) =>
+  API.post(`${POSTS_URL}/${postId}/comments`, newComment);
+export const deleteComment = (postId, commentId) =>
+  API.delete(`${POSTS_URL}/${postId}/comments/${commentId}`);

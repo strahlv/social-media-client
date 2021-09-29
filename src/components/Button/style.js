@@ -13,6 +13,10 @@ export const StyledButton = styled.button`
   &:hover {
     opacity: 0.8;
   }
+
+  &:disabled {
+    opacity: 0.25;
+  }
 `;
 
 export const StyledPrimaryButton = styled(StyledButton)`
@@ -53,4 +57,33 @@ export const StyledLightButton = styled(StyledButton)`
 export const StyledDarkButton = styled(StyledButton)`
   background: var(--clr-dark);
   color: var(--clr-light);
+`;
+
+export const StyledIconButton = styled.button`
+  height: 2rem;
+  width: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  border-radius: 50%;
+  background: var(--clr-light);
+  color: var(--clr-primary);
+  font-size: 1rem;
+  font-family: var(--font-poppins);
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: var(--clr-secondary-light);
+  }
+`;
+
+export const StyledIconDangerButton = styled(StyledIconButton)`
+  color: var(--clr-primary-accent);
+
+  &:hover {
+    background: var(--clr-primary-accent);
+    color: var(--clr-light);
+  }
 `;

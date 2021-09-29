@@ -20,7 +20,6 @@ const RegisterForm = () => {
       dispatch(register(formValues));
       history.push("/");
     }
-    setFormValues({});
   };
 
   return (

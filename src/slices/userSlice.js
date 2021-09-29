@@ -1,15 +1,19 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../api";
+import { delay } from "../utils";
 
 const initialState = {
   data: null,
-  status: "loading",
+  status: "idle",
   error: null,
 };
 
 export const fetchAuthenticatedUser = createAsyncThunk(
   "user/fetchAuthenticatedUser",
   async () => {
+    // Fake delay
+    await delay(1000);
+
     const res = await api.fetchAuthenticatedUser();
     return res.data;
   }
@@ -41,6 +45,7 @@ export const userSlice = createSlice({
       .addCase(fetchAuthenticatedUser.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = action.payload;
+        state.error = null;
       })
       .addCase(fetchAuthenticatedUser.rejected, (state, action) => {
         state.status = "failed";
@@ -52,6 +57,7 @@ export const userSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = action.payload;
+        state.error = null;
       })
       .addCase(login.rejected, (state, action) => {
         state.status = "failed";
@@ -62,7 +68,14 @@ export const userSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state, action) => {
         state.status = "succeeded";
+        // state = {
+        //   data: null,
+        //   status: "idle",
+        //   error: null,
+        // };
         state.data = null;
+        state.status = "idle";
+        state.error = null;
       })
       .addCase(logout.rejected, (state, action) => {
         state.status = "failed";
@@ -74,6 +87,7 @@ export const userSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = action.payload;
+        state.error = null;
       })
       .addCase(register.rejected, (state, action) => {
         state.status = "failed";

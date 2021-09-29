@@ -1,12 +1,22 @@
 import styled from "styled-components";
 
 export const StyledInput = styled.input`
-  border: 2px solid var(--clr-primary);
+  border: 1px solid var(--clr-primary);
   border-radius: 5px;
+  color: var(--clr-dark);
   font-family: var(--font-poppins);
   font-size: 1rem;
   width: 100%;
   padding: 0.5rem 1rem;
+
+  &:focus {
+    outline-color: var(--clr-primary-accent);
+  }
+`;
+
+export const StyledTitleInput = styled(StyledInput)`
+  font-size: 2rem;
+  font-weight: bold;
 `;
 
 export const StyledLabel = styled.label`

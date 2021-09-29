@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-const useForm = (callback) => {
-  const [formValues, setFormValues] = useState({});
+const useForm = (initialState = {}) => {
+  const [formValues, setFormValues] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (evt) =>
@@ -12,7 +12,15 @@ const useForm = (callback) => {
     setIsLoading(true);
     callback();
     setIsLoading(false);
-    setFormValues({});
+
+    const clearForm = () => {
+      const emptyValues = { ...formValues };
+      for (const [key, value] of Object.entries(emptyValues)) {
+        emptyValues[key] = "";
+      }
+      setFormValues(emptyValues);
+    };
+    clearForm();
   };
 
   return [{ formValues, setFormValues, isLoading }, handleChange, handleSubmit];

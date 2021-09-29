@@ -2,10 +2,9 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router";
 import styled from "styled-components";
-import { fetchPosts, selectAllPosts } from "../../slices/postsSlice";
-import { selectUser } from "../../slices/userSlice";
+import { fetchAuthenticatedUser, selectUser } from "../../slices/userSlice";
 import Container from "../Container";
-import LoadingSpinner from "../LoadingSpinner";
+import LoadingScreen from "../LoadingScreen";
 import Navbar from "../Navbar";
 import PostForm from "../PostForm";
 import PostList from "../PostList";
@@ -24,26 +23,22 @@ const WelcomeTitle = styled.h1`
 
 const HomePage = () => {
   const dispatch = useDispatch();
+
   const user = useSelector(selectUser);
-  const posts = useSelector(selectAllPosts);
 
   useEffect(() => {
-    if (user.data) {
-      dispatch(fetchPosts());
+    if (user.status === "idle" && !user.data) {
+      dispatch(fetchAuthenticatedUser());
     }
-  }, [dispatch, user.data]);
+  }, [dispatch, user.data, user.status]);
 
   let content;
 
   if (user.status === "loading") {
-    content = (
-      <Container>
-        <LoadingSpinner />
-      </Container>
-    );
-  } else if (!user.data) {
+    content = <LoadingScreen />;
+  } else if (user.status === "failed") {
     content = <Redirect to="login" />;
-  } else {
+  } else if (user.status === "succeeded" && user.data) {
     content = (
       <>
         <Navbar />
@@ -52,7 +47,7 @@ const HomePage = () => {
             Hello <span>{user.data.firstName}</span>! ;)
           </WelcomeTitle>
           <PostForm />
-          <PostList posts={posts} />
+          <PostList userId={user.data._id} />
         </Container>
       </>
     );

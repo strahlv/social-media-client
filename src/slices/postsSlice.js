@@ -4,6 +4,7 @@ import {
   createSlice,
 } from "@reduxjs/toolkit";
 import * as api from "../api";
+import { delay } from "../utils";
 
 const postsAdapter = createEntityAdapter({
   sortComparer: (a, b) => b.createdAt.localeCompare(a.createdAt),
@@ -15,8 +16,15 @@ const initialState = postsAdapter.getInitialState({
 });
 
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
+  // Fake delay
+  await delay(1000);
+
   const res = await api.fetchPosts();
-  console.log(res.data);
+  return res.data;
+});
+
+export const fetchPost = createAsyncThunk("posts/fetchPost", async (postId) => {
+  const res = await api.fetchPost(postId);
   return res.data;
 });
 
@@ -30,9 +38,10 @@ export const createPost = createAsyncThunk(
 
 export const updatePost = createAsyncThunk(
   "posts/updatePost",
-  async (postId) => {
-    const res = await api.updatePost(postId);
-    console.log(res.data);
+  async ({ postId, updatedPost }) => {
+    const res = await api.updatePost(postId, updatedPost);
+    delete res.data.author;
+    delete res.data.comments;
     return res.data;
   }
 );
@@ -41,14 +50,14 @@ export const deletePost = createAsyncThunk(
   "posts/deletePost",
   async (postId) => {
     const res = await api.deletePost(postId);
-    console.log(res.data);
-    return res.data;
+    return res.data._id;
   }
 );
 
 export const likePost = createAsyncThunk("posts/likePost", async (postId) => {
   const res = await api.likePost(postId);
-  console.log(res.data);
+  delete res.data.author;
+  delete res.data.comments;
   return res.data;
 });
 
@@ -56,7 +65,24 @@ export const dislikePost = createAsyncThunk(
   "posts/dislikePost",
   async (postId) => {
     const res = await api.dislikePost(postId);
-    console.log(res.data);
+    delete res.data.author;
+    delete res.data.comments;
+    return res.data;
+  }
+);
+
+export const createComment = createAsyncThunk(
+  "posts/createComment",
+  async ({ postId, newComment }) => {
+    const res = await api.createComment(postId, newComment);
+    return res.data;
+  }
+);
+
+export const deleteComment = createAsyncThunk(
+  "posts/deleteComment",
+  async ({ postId, commentId }) => {
+    const res = await api.deleteComment(postId, commentId);
     return res.data;
   }
 );
@@ -66,7 +92,9 @@ export const postsSlice = createSlice({
   initialState,
   reducers: {
     postsCleared: (state) => {
-      state.data = [];
+      postsAdapter.removeAll(state);
+      state.status = "idle";
+      state.error = null;
     },
   },
   extraReducers(builder) {
@@ -89,16 +117,31 @@ export const postsSlice = createSlice({
       })
       .addCase(createPost.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data.push(action.payload);
+        postsAdapter.addOne(state, action.payload);
       })
-      .addCase(createPost.rejected, postsAdapter.addOne)
+      .addCase(createPost.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      // FETCH ONE
+      .addCase(fetchPost.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(fetchPost.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        postsAdapter.upsertOne(state, action.payload);
+      })
+      .addCase(fetchPost.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
       // UPDATE
       .addCase(updatePost.pending, (state, action) => {
         state.status = "loading";
       })
       .addCase(updatePost.fulfilled, (state, action) => {
         state.status = "succeeded";
-        // UPDATE
+        postsAdapter.upsertOne(state, action.payload);
       })
       .addCase(updatePost.rejected, (state, action) => {
         state.status = "failed";
@@ -110,7 +153,7 @@ export const postsSlice = createSlice({
       })
       .addCase(deletePost.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = state.data.filter((post) => post._id === action.payload);
+        postsAdapter.removeOne(state, action.payload);
       })
       .addCase(deletePost.rejected, (state, action) => {
         state.status = "failed";
@@ -139,13 +182,42 @@ export const postsSlice = createSlice({
       .addCase(dislikePost.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      // CREATE COMMENT
+      .addCase(createComment.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(createComment.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        postsAdapter.upsertOne(state, action.payload);
+      })
+      .addCase(createComment.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      // DELETE COMMENT
+      .addCase(deleteComment.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(deleteComment.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        postsAdapter.upsertOne(state, action.payload);
+      })
+      .addCase(deleteComment.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
       });
   },
 });
 
 export const { postsCleared } = postsSlice.actions;
 
-export const { selectAll: selectAllPosts, selectById: selectPostsById } =
-  postsAdapter.getSelectors((state) => state.posts);
+export const {
+  selectAll: selectAllPosts,
+  selectById: selectPostById,
+  selectIds: selectPostsIds,
+} = postsAdapter.getSelectors((state) => state.posts);
+
+export const selectPostsStatus = (state) => state.posts.status;
 
 export default postsSlice.reducer;

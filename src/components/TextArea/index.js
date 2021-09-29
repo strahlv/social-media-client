@@ -1,13 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { StyledInput } from "../Input/style";
 
-const StyledTextArea = styled.textarea`
-  border: 2px solid var(--clr-primary);
-  border-radius: 5px;
-  font-family: var(--font-poppins);
-  font-size: 1rem;
-  width: 100%;
-  padding: 0.5rem 1rem;
+const StyledTextArea = styled(StyledInput)`
+  border-width: 1px;
 `;
 
 const TextArea = ({ name, onChange, value }) => {
@@ -18,9 +14,9 @@ const TextArea = ({ name, onChange, value }) => {
       autoComplete="off"
       rows={5}
       onChange={onChange}
-    >
-      {value}
-    </StyledTextArea>
+      value={value}
+      as="textarea"
+    />
   );
 };
 

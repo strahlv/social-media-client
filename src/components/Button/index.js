@@ -2,6 +2,8 @@ import React from "react";
 import {
   StyledButton,
   StyledDarkButton,
+  StyledIconButton,
+  StyledIconDangerButton,
   StyledLightButton,
   StyledPrimaryAccentButton,
   StyledPrimaryButton,
@@ -52,3 +54,8 @@ export const SecondaryAccentButton = (props) =>
 export const LightButton = (props) => getStyledButton(StyledLightButton, props);
 
 export const DarkButton = (props) => getStyledButton(StyledDarkButton, props);
+
+export const IconButton = (props) => getStyledButton(StyledIconButton, props);
+
+export const IconDangerButton = (props) =>
+  getStyledButton(StyledIconDangerButton, props);

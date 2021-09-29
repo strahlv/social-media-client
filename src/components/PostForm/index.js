@@ -17,7 +17,7 @@ const PostForm = () => {
     const newPost = { ...formValues };
     newPost.tags = newPost.tags?.split(" ");
     dispatch(createPost(newPost));
-    setFormValues({ title: "", body: "", tags: "" });
+    // setFormValues({ title: "", body: "", tags: "" });
   };
 
   return (
@@ -31,6 +31,8 @@ const PostForm = () => {
         onChange={handleChange}
         value={formValues.title}
         autoComplete="off"
+        variant="title"
+        placeholder="What's on your mind?"
       />
       <TextArea
         name="body"
@@ -47,6 +49,7 @@ const PostForm = () => {
         onChange={handleChange}
         value={formValues.tags}
         autoComplete="off"
+        placeholder="separate tags by space no hashtags needed"
       />
       <SecondaryButton type="submit" disabled={isLoading} stretch>
         Post

@@ -1,23 +1,10 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import { Switch, Route } from "react-router-dom";
 import HomePage from "./components/HomePage";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 
-import { fetchAuthenticatedUser, selectUser } from "./slices/userSlice";
-
 function App() {
-  const dispatch = useDispatch();
-
-  const user = useSelector(selectUser);
-
-  useEffect(() => {
-    if (!user.data) {
-      dispatch(fetchAuthenticatedUser());
-    }
-  }, [dispatch, user.data]);
-
   return (
     <div className="App">
       <Switch>
