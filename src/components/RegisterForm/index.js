@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import useForm from "../../hooks/useForm";
-import { register } from "../../slices/userSlice";
+import { register } from "../../slices/usersSlice";
 import { PrimaryButton } from "../Button";
 import Container from "../Container";
 import Form from "../Form";

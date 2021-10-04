@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import {
-  fetchPosts,
+  fetchUserPosts,
   selectPostsIds,
   selectPostsStatus,
 } from "../../slices/postsSlice";
@@ -22,20 +22,22 @@ const StyledList = styled.ul`
 const PostList = ({ userId }) => {
   const dispatch = useDispatch();
 
-  const postStatus = useSelector(selectPostsStatus);
+  const postsStatus = useSelector(selectPostsStatus);
   const postsIds = useSelector(selectPostsIds);
 
   useEffect(() => {
-    if (postStatus === "idle") {
-      dispatch(fetchPosts());
-    }
-  }, [dispatch, postStatus]);
+    dispatch(fetchUserPosts(userId));
+  }, [dispatch, userId]);
+
+  if (postsStatus === "error") {
+    return <p>Oops...</p>;
+  }
 
   let items = <LoadingSpinner />;
 
   if (postsIds.length) {
     items = postsIds.map((postId) => {
-      return <PostCard key={postId} postId={postId} />;
+      return <PostCard key={postId} userId={userId} postId={postId} />;
     });
   }
 

@@ -16,6 +16,7 @@ import {
   selectPostById,
   updatePost,
   createComment,
+  selectPostsStatus,
 } from "../../slices/postsSlice";
 import { Menu, MenuItem, MenuItemDanger } from "../Menu";
 import Form from "../Form";
@@ -38,7 +39,7 @@ import {
   TagList,
 } from "./style";
 import CommentList from "../CommentList";
-import { selectUser } from "../../slices/userSlice";
+import { selectCurrentUserId } from "../../slices/usersSlice";
 
 const ReactionButton = ({ icon, value, highlighted, onClick }) => {
   const content = (
@@ -65,29 +66,24 @@ const PostCard = ({ postId }) => {
   const [{ formValues, setFormValues, isLoading }, handleChange, handleSubmit] =
     useForm();
 
-  const user = useSelector(selectUser);
+  const currentUserId = useSelector(selectCurrentUserId);
   const post = useSelector((state) => selectPostById(state, postId));
-  const postsState = useSelector((state) => state.posts);
+  const postsStatus = useSelector(selectPostsStatus);
 
   const [isLiked, setIsLiked] = useState(
-    post.likes?.find((id) => id === user.data._id)
+    post.likes?.find((id) => id === currentUserId)
   );
 
   const [isDisliked, setIsDisliked] = useState(
-    post.dislikes?.find((id) => id === user.data._id)
+    post.dislikes?.find((id) => id === currentUserId)
   );
 
-  const isAuthor = post.author._id === user.data._id;
+  const isAuthor = post.author._id === currentUserId;
 
   // Voltar ao estado ocioso (idle) ao terminar de carregar uma requisição
-  if (postsState.status !== "loading" && cardState === "loading") {
+  if (postsStatus !== "loading" && cardState === "loading") {
     setCardState("idle");
   }
-
-  // Formata tags
-  const tags = post.tags.map((tag, index) => (
-    <StyledTag key={index}>#{tag}</StyledTag>
-  ));
 
   const handleLike = () => {
     dispatch(likePost(post._id));
@@ -149,7 +145,7 @@ const PostCard = ({ postId }) => {
   };
 
   // **************************************
-  // COMMENT FORM
+  // NEW COMMENT FORM
   // **************************************
   const commentForm = cardState === "commenting" && (
     <CommentFormWrapper>
@@ -179,25 +175,35 @@ const PostCard = ({ postId }) => {
   // **************************************
   // POST CONTENT
   // **************************************
+  // Formata tags
+  const tags = post.tags.map((tag, index) => (
+    <StyledTag key={index}>#{tag}</StyledTag>
+  ));
+
+  // Botões de like/deslike/comment
+  const postButtons = isAuthor ? (
+    <OutsideClickHandler onOutsideClick={handleOutsideClick}>
+      <IconButton onClick={handleToggleMenu}>
+        <FaEllipsisV />
+      </IconButton>
+      <Menu visible={isMenuOpened}>
+        <MenuItem onClick={handleShowUpdateForm}>
+          <FaEdit /> Edit
+        </MenuItem>
+        <MenuItemDanger onClick={handleDelete}>
+          <FaTrash /> Delete
+        </MenuItemDanger>
+      </Menu>
+    </OutsideClickHandler>
+  ) : null;
+
   const postContent = (
     <>
       <PostHeader>
         <PostTitle>{post.title}</PostTitle>
-        <OutsideClickHandler onOutsideClick={handleOutsideClick}>
-          <IconButton onClick={handleToggleMenu}>
-            <FaEllipsisV />
-          </IconButton>
-          <Menu visible={isMenuOpened}>
-            <MenuItem onClick={handleShowUpdateForm}>
-              <FaEdit /> Edit
-            </MenuItem>
-            <MenuItemDanger onClick={handleDelete}>
-              <FaTrash /> Delete
-            </MenuItemDanger>
-          </Menu>
-        </OutsideClickHandler>
+        {postButtons}
       </PostHeader>
-      <PostAuthor>
+      <PostAuthor to={`/users/${post.author._id}`}>
         by {post.author.fullName}, {post.createdAge}
       </PostAuthor>
       <PostBody>{post.body}</PostBody>
@@ -227,7 +233,7 @@ const PostCard = ({ postId }) => {
   );
 
   // **************************************
-  // EDIT FORM
+  // EDIT POST FORM
   // **************************************
   const editForm = (
     <Form onSubmit={handleSubmit(handleUpdate)}>

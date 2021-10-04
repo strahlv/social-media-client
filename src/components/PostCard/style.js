@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const StyledCard = styled.li`
@@ -34,12 +35,19 @@ export const PostTitle = styled.h2`
   text-decoration: underline wavy var(--clr-secondary);
 `;
 
-export const PostAuthor = styled.p`
+export const PostAuthor = styled(Link)`
   color: var(--clr-secondary-accent);
   font-style: italic;
   font-size: 0.8rem;
   margin-bottom: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--clr-secondary);
+  }
 `;
+
+export const PostAge = styled.p``;
 
 export const PostBody = styled.p`
   padding: 2rem 0;

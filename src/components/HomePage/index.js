@@ -1,10 +1,8 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router";
+import React from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { fetchAuthenticatedUser, selectUser } from "../../slices/userSlice";
+import { selectCurrentUserId, selectUserById } from "../../slices/usersSlice";
 import Container from "../Container";
-import LoadingScreen from "../LoadingScreen";
 import Navbar from "../Navbar";
 import PostForm from "../PostForm";
 import PostList from "../PostList";
@@ -22,38 +20,29 @@ const WelcomeTitle = styled.h1`
 `;
 
 const HomePage = () => {
-  const dispatch = useDispatch();
+  const currentUserId = useSelector(selectCurrentUserId);
+  const user = useSelector((state) => selectUserById(state, currentUserId));
 
-  const user = useSelector(selectUser);
-
-  useEffect(() => {
-    if (user.status === "idle" && !user.data) {
-      dispatch(fetchAuthenticatedUser());
-    }
-  }, [dispatch, user.data, user.status]);
-
-  let content;
-
-  if (user.status === "loading") {
-    content = <LoadingScreen />;
-  } else if (user.status === "failed") {
-    content = <Redirect to="login" />;
-  } else if (user.status === "succeeded" && user.data) {
-    content = (
-      <>
-        <Navbar />
-        <Container>
-          <WelcomeTitle>
-            Hello <span>{user.data.firstName}</span>! ;)
-          </WelcomeTitle>
-          <PostForm />
-          <PostList userId={user.data._id} />
-        </Container>
-      </>
+  if (!user) {
+    return (
+      <Container>
+        <WelcomeTitle>Oops...</WelcomeTitle>
+      </Container>
     );
   }
 
-  return <>{content}</>;
+  return (
+    <>
+      <Navbar />
+      <Container>
+        <WelcomeTitle>
+          Hello <span>{user.firstName}</span>! ;)
+        </WelcomeTitle>
+        <PostForm />
+        <PostList userId={user._id} />
+      </Container>
+    </>
+  );
 };
 
 export default HomePage;

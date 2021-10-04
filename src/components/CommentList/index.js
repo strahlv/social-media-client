@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { deleteComment } from "../../slices/postsSlice";
-import { selectUser } from "../../slices/userSlice";
+import { selectCurrentUserId } from "../../slices/usersSlice";
 import { IconButton, IconDangerButton } from "../Button";
+import { PostAuthor } from "../PostCard/style";
 
 const CommentWrapper = styled.section`
   margin-top: 2rem;
@@ -62,7 +63,7 @@ const Comment = ({ postId, commentData }) => {
 
   const dispatch = useDispatch();
 
-  const user = useSelector(selectUser);
+  const currentUserId = useSelector(selectCurrentUserId);
   const isLoading = commentState === "loading";
 
   const handleDelete = () => {
@@ -70,7 +71,7 @@ const Comment = ({ postId, commentData }) => {
     dispatch(deleteComment({ postId, commentId: commentData._id }));
   };
 
-  const isAuthor = commentData.author._id === user.data._id;
+  const isAuthor = commentData.author._id === currentUserId;
 
   const authorButtons = isAuthor ? (
     <div>
@@ -86,7 +87,9 @@ const Comment = ({ postId, commentData }) => {
   return (
     <StyledListItem isLoading={isLoading}>
       <header>
-        <h3>by {commentData.author?.firstName}:</h3>
+        <PostAuthor to={`/users/${commentData.author._id}`}>
+          {commentData.author?.fullName || "Unknown"}:
+        </PostAuthor>
         {authorButtons}
       </header>
       <p>{commentData.body}</p>
@@ -95,7 +98,7 @@ const Comment = ({ postId, commentData }) => {
   );
 };
 
-const CommentList = ({ postId, comments, ...rest }) => {
+const CommentList = ({ postId, comments }) => {
   const items = comments?.map((comment) => {
     return <Comment key={comment._id} postId={postId} commentData={comment} />;
   });
@@ -103,7 +106,7 @@ const CommentList = ({ postId, comments, ...rest }) => {
   return (
     <CommentWrapper>
       {comments?.length ? (
-        <StyledList {...rest}>{items}</StyledList>
+        <StyledList>{items}</StyledList>
       ) : (
         "Be the first to comment!"
       )}
