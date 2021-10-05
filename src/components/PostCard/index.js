@@ -27,7 +27,8 @@ import useForm from "../../hooks/useForm";
 import { FlexRow } from "../Layout";
 import {
   CommentFormWrapper,
-  PostAuthor,
+  Author,
+  AuthorWrapper,
   PostBody,
   PostHeader,
   PostTitle,
@@ -37,9 +38,11 @@ import {
   StyledReactionButton,
   StyledTag,
   TagList,
+  TitleWrapper,
 } from "./style";
 import CommentList from "../CommentList";
 import { selectCurrentUserId } from "../../slices/usersSlice";
+import Avatar from "../Avatar";
 
 const ReactionButton = ({ icon, value, highlighted, onClick }) => {
   const content = (
@@ -181,7 +184,7 @@ const PostCard = ({ postId }) => {
   ));
 
   // Botões de like/deslike/comment
-  const postButtons = isAuthor ? (
+  const postMenu = isAuthor ? (
     <OutsideClickHandler onOutsideClick={handleOutsideClick}>
       <IconButton onClick={handleToggleMenu}>
         <FaEllipsisV />
@@ -200,12 +203,17 @@ const PostCard = ({ postId }) => {
   const postContent = (
     <>
       <PostHeader>
-        <PostTitle>{post.title}</PostTitle>
-        {postButtons}
+        <TitleWrapper>
+          <PostTitle>{post.title}</PostTitle>
+        </TitleWrapper>
+        {postMenu}
       </PostHeader>
-      <PostAuthor to={`/users/${post.author._id}`}>
-        by {post.author.fullName}, {post.createdAge}
-      </PostAuthor>
+      <AuthorWrapper>
+        <Avatar src="" size="sm" />
+        <Author to={`/users/${post.author._id}`}>
+          by {post.author.fullName}, {post.createdAge}
+        </Author>
+      </AuthorWrapper>
       <PostBody>{post.body}</PostBody>
       <TagList>{tags}</TagList>
       <ReactionsWrapper>

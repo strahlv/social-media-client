@@ -6,11 +6,13 @@ import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter as Router } from "react-router-dom";
 import GlobalStyle from "./GlobalStyle";
+import ScrollToTop from "./components/ScrollToTop";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <Router>
+        <ScrollToTop />
         <GlobalStyle />
         <App />
       </Router>

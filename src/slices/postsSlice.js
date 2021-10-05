@@ -199,10 +199,10 @@ export const postsSlice = createSlice({
       // DISLIKE
       .addCase(dislikePost.pending, (state, action) => {
         state.status = "loading";
-        postsAdapter.upsertOne(state, action.payload);
       })
       .addCase(dislikePost.fulfilled, (state, action) => {
         state.status = "succeeded";
+        postsAdapter.upsertOne(state, action.payload);
       })
       .addCase(dislikePost.rejected, (state, action) => {
         state.status = "failed";

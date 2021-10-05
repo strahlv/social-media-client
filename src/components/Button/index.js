@@ -14,15 +14,18 @@ import {
 } from "./style";
 
 const getStyledButton = (Component, props) => {
-  const { type, onClick, disabled, stretch, color, children } = props;
+  const { type, onClick, disabled, stretch, color, backgroundColor, children } =
+    props;
 
   const button = (
     <Component
+      {...props}
       type={type}
       onClick={onClick}
       disabled={disabled}
       stretch={stretch}
       color={color}
+      backgroundColor={backgroundColor}
     >
       {children}
     </Component>

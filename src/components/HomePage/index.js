@@ -7,7 +7,6 @@ import Navbar from "../Navbar";
 import PostForm from "../PostForm";
 import PostList from "../PostList";
 
-// TODO: remove
 const WelcomeTitle = styled.h1`
   font-size: 3rem;
   font-weight: bold;

@@ -10,7 +10,7 @@ const StyledContainer = styled.div`
   max-width: 1100px;
   min-height: 100vh;
   margin: auto;
-  padding: 1rem 2rem;
+  padding: 3rem 2rem;
 `;
 
 const Container = ({ children }) => {

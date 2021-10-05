@@ -1,5 +1,10 @@
 import styled from "styled-components";
 
+export const InputWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
 export const StyledInput = styled.input`
   border: 1px solid var(--clr-primary);
   border-radius: 5px;
@@ -22,13 +27,9 @@ export const StyledTitleInput = styled(StyledInput)`
 export const StyledLabel = styled.label`
   position: absolute;
   font-size: 0.9rem;
+  line-height: 1rem;
   background-color: white;
   top: -10px;
   left: 10px;
-  padding: 5px 2px;
-`;
-
-export const InputWrapper = styled.div`
-  position: relative;
-  width: 100%;
+  padding: 0 2px;
 `;

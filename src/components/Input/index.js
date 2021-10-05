@@ -16,9 +16,11 @@ const Input = ({
   onChange,
   value,
   variant,
+  width,
+  className,
 }) => {
   return (
-    <InputWrapper>
+    <InputWrapper width={width} className={className}>
       {labelText ? <StyledLabel htmlFor={name}>{labelText}</StyledLabel> : null}
       {variant !== "title" ? (
         <StyledInput

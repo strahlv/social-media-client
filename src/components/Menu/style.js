@@ -1,4 +1,15 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const fadeIn = keyframes`
+  from {
+    top: 0;
+    opacity: 0;
+  }
+  to {
+    top: 0.5rem;
+    opacity: 1;
+  }
+`;
 
 export const StyledMenuContainer = styled.div`
   align-self: flex-start;
@@ -18,4 +29,5 @@ export const StyledMenuItems = styled.div`
   border-radius: 5px;
   box-shadow: 5px 5px var(--clr-primary);
   overflow: hidden;
+  animation: ${fadeIn} 0.2s ease;
 `;

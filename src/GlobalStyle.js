@@ -40,6 +40,13 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 	box-sizing: border-box;
+	line-height: 1.5rem;
+    font-weight: 300;
+
+	&::selection {
+		background: var(--clr-primary-accent);
+		color: var(--clr-light);
+	}
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 

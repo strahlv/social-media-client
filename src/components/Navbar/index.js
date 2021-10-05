@@ -1,10 +1,14 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { FaBell, FaSign, FaSignOutAlt, FaUser } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { postsCleared } from "../../slices/postsSlice";
-import { logout } from "../../slices/usersSlice";
-import { SecondaryLightButton } from "../Button";
+import { logout, selectCurrentUserId } from "../../slices/usersSlice";
+import { IconButton } from "../Button";
+import Input from "../Input";
+import { FlexRow } from "../Layout";
 
 const StyledNav = styled.nav`
   background: linear-gradient(
@@ -18,13 +22,37 @@ const StyledNav = styled.nav`
   position: sticky;
   top: 0;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
   z-index: 100;
+  color: var(--clr-light);
+`;
+
+const Logo = styled(Link)`
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--clr-light);
+  text-decoration: none;
+
+  & span {
+    font-weight: bold;
+    text-decoration: underline wavy white;
+  }
+`;
+
+const ButtonsWrapper = styled(FlexRow)`
+  flex: 0 1;
+`;
+
+const SearchBar = styled(Input)`
+  max-width: 600px;
 `;
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const currentUserId = useSelector(selectCurrentUserId);
 
   const handleLogout = () => {
     dispatch(postsCleared());
@@ -34,9 +62,45 @@ const Navbar = () => {
 
   return (
     <StyledNav>
-      <SecondaryLightButton type="button" onClick={handleLogout}>
-        Logout
-      </SecondaryLightButton>
+      <Logo to="/">
+        re<span>markz</span>
+      </Logo>
+      <SearchBar
+        name="search"
+        placeholder="Search by user, title, hashtag..."
+      />
+      <ButtonsWrapper>
+        <IconButton
+          to={`/users/${currentUserId}`}
+          type="button"
+          color="light"
+          backgroundColor="transparent"
+          hoverColor="primary"
+          hoverBackgroundColor="light"
+          as={Link}
+        >
+          <FaUser />
+        </IconButton>
+        <IconButton
+          type="button"
+          color="light"
+          backgroundColor="transparent"
+          hoverColor="primary"
+          hoverBackgroundColor="light"
+        >
+          <FaBell />
+        </IconButton>
+        <IconButton
+          type="button"
+          onClick={handleLogout}
+          color="light"
+          backgroundColor="transparent"
+          hoverColor="primary"
+          hoverBackgroundColor="light"
+        >
+          <FaSignOutAlt />
+        </IconButton>
+      </ButtonsWrapper>
     </StyledNav>
   );
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import styled from "styled-components";
 import useForm from "../../hooks/useForm";
 import { createPost } from "../../slices/postsSlice";
 import { SecondaryButton } from "../Button";
@@ -7,11 +8,14 @@ import Form from "../Form";
 import Input from "../Input";
 import TextArea from "../TextArea";
 
+const StyledForm = styled(Form)`
+  margin-bottom: 5rem;
+`;
+
 const PostForm = () => {
   const dispatch = useDispatch();
 
-  const [{ formValues, setFormValues, isLoading }, handleChange, handleSubmit] =
-    useForm();
+  const [{ formValues, isLoading }, handleChange, handleSubmit] = useForm();
 
   const handleCreatePost = () => {
     const newPost = { ...formValues };
@@ -21,7 +25,7 @@ const PostForm = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit(handleCreatePost)}>
+    <StyledForm onSubmit={handleSubmit(handleCreatePost)}>
       <Input
         type="text"
         name="title"
@@ -54,7 +58,7 @@ const PostForm = () => {
       <SecondaryButton type="submit" disabled={isLoading} stretch>
         Post
       </SecondaryButton>
-    </Form>
+    </StyledForm>
   );
 };
 
