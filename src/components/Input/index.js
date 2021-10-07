@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  InputWrapper,
-  StyledInput,
-  StyledLabel,
-  StyledTitleInput,
-} from "./style";
+import { IconWrapper, InputWrapper, StyledInput, StyledLabel } from "./style";
 
 const Input = ({
   labelText,
@@ -18,33 +13,25 @@ const Input = ({
   variant,
   width,
   className,
+  icon,
+  ...rest
 }) => {
   return (
     <InputWrapper width={width} className={className}>
       {labelText ? <StyledLabel htmlFor={name}>{labelText}</StyledLabel> : null}
-      {variant !== "title" ? (
-        <StyledInput
-          type={type}
-          name={name}
-          id={name}
-          placeholder={placeholder}
-          required={required}
-          autoComplete={autoComplete}
-          onChange={onChange}
-          value={value}
-        />
-      ) : (
-        <StyledTitleInput
-          type={type}
-          name={name}
-          id={name}
-          placeholder={placeholder}
-          required={required}
-          autoComplete={autoComplete}
-          onChange={onChange}
-          value={value}
-        />
-      )}
+      <StyledInput
+        type={type}
+        name={name}
+        id={name}
+        placeholder={placeholder}
+        required={required}
+        autoComplete={autoComplete}
+        onChange={onChange}
+        value={value}
+        variant={variant}
+        {...rest}
+      />
+      {icon ? <IconWrapper>{icon}</IconWrapper> : null}
     </InputWrapper>
   );
 };

@@ -22,7 +22,7 @@ import { Menu, MenuItem, MenuItemDanger } from "../Menu";
 import Form from "../Form";
 import Input from "../Input";
 import TextArea from "../TextArea";
-import { IconButton, PrimaryAccentButton, PrimaryButton } from "../Button";
+import { Button, IconButton } from "../Button";
 import useForm from "../../hooks/useForm";
 import { FlexRow } from "../Layout";
 import {
@@ -160,16 +160,17 @@ const PostCard = ({ postId }) => {
           value={formValues.body}
         />
         <FlexRow>
-          <PrimaryButton type="submit" stretch>
-            Comment
-          </PrimaryButton>
-          <PrimaryAccentButton
+          <Button type="submit" stretch backgroundColor="secondary">
+            Comentar
+          </Button>
+          <Button
             type="button"
             onClick={() => setCardState("idle")}
             stretch
+            backgroundColor="primary-accent"
           >
-            Cancel
-          </PrimaryAccentButton>
+            Cancelar
+          </Button>
         </FlexRow>
       </Form>
     </CommentFormWrapper>
@@ -191,10 +192,10 @@ const PostCard = ({ postId }) => {
       </IconButton>
       <Menu visible={isMenuOpened}>
         <MenuItem onClick={handleShowUpdateForm}>
-          <FaEdit /> Edit
+          <FaEdit /> Editar
         </MenuItem>
         <MenuItemDanger onClick={handleDelete}>
-          <FaTrash /> Delete
+          <FaTrash /> Deletar
         </MenuItemDanger>
       </Menu>
     </OutsideClickHandler>
@@ -211,7 +212,7 @@ const PostCard = ({ postId }) => {
       <AuthorWrapper>
         <Avatar src="" size="sm" />
         <Author to={`/users/${post.author._id}`}>
-          by {post.author.fullName}, {post.createdAge}
+          por {post.author.fullName}, {post.createdAge}
         </Author>
       </AuthorWrapper>
       <PostBody>{post.body}</PostBody>
@@ -248,7 +249,7 @@ const PostCard = ({ postId }) => {
       <Input
         type="text"
         name="title"
-        labelText="Title"
+        labelText="Título"
         required
         onChange={handleChange}
         value={formValues.title}
@@ -270,12 +271,21 @@ const PostCard = ({ postId }) => {
         autoComplete="off"
       />
       <FlexRow>
-        <PrimaryButton type="submit" disabled={isLoading} stretch>
-          Save
-        </PrimaryButton>
-        <PrimaryAccentButton onClick={() => setCardState("idle")} stretch>
-          Cancel
-        </PrimaryAccentButton>
+        <Button
+          type="submit"
+          disabled={isLoading}
+          stretch
+          backgroundColor="secondary"
+        >
+          Salvar
+        </Button>
+        <Button
+          onClick={() => setCardState("idle")}
+          stretch
+          backgroundColor="primary-accent"
+        >
+          Cancelar
+        </Button>
       </FlexRow>
     </Form>
   );

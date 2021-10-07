@@ -7,7 +7,7 @@ import LoginForm from "./components/LoginForm";
 import PrivateRoute from "./components/PrivateRoute";
 import RegisterForm from "./components/RegisterForm";
 import UserPage from "./components/UserPage";
-import Footer from "./Footer";
+import Footer from "./components/Footer";
 import { fetchAuthenticatedUser, selectUsersState } from "./slices/usersSlice";
 
 function App() {

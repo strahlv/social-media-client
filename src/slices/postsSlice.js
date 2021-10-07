@@ -17,7 +17,7 @@ const initialState = postsAdapter.getInitialState({
 
 export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
   // Fake delay
-  // await delay(1000);
+  await delay(1000);
 
   const res = await api.fetchPosts();
   return res.data;
@@ -27,7 +27,7 @@ export const fetchUserPosts = createAsyncThunk(
   "posts/fetchUserPosts",
   async (userId) => {
     // Fake delay
-    // await delay(1000);
+    await delay(1000);
 
     const res = await api.fetchUserPosts(userId);
     return res.data;

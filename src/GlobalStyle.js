@@ -42,6 +42,7 @@ time, mark, audio, video {
 	box-sizing: border-box;
 	line-height: 1.5rem;
     font-weight: 300;
+	scroll-behavior: smooth;
 
 	&::selection {
 		background: var(--clr-primary-accent);
@@ -62,6 +63,13 @@ body {
     var(--clr-primary) 0%,
     var(--clr-secondary) 100%
   );
+}
+a {
+	color: var(--clr-secondary-accent);
+
+	&:hover {
+	color: var(--clr-secondary);
+	}
 }
 ol, ul {
 	list-style: none;

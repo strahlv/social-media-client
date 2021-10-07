@@ -24,7 +24,7 @@ const CommentList = ({ postId, comments }) => {
       {comments?.length ? (
         <StyledList>{items}</StyledList>
       ) : (
-        "Be the first to comment!"
+        "Seja o primeiro a comentar!"
       )}
     </CommentWrapper>
   );

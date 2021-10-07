@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import {
+  fetchPosts,
   fetchUserPosts,
   selectPostsIds,
   selectPostsStatus,
@@ -25,7 +26,11 @@ const PostList = ({ userId }) => {
   const postsIds = useSelector(selectPostsIds);
 
   useEffect(() => {
-    dispatch(fetchUserPosts(userId));
+    if (userId) {
+      dispatch(fetchUserPosts(userId));
+    } else {
+      dispatch(fetchPosts());
+    }
   }, [dispatch, userId]);
 
   if (postsStatus === "error") {

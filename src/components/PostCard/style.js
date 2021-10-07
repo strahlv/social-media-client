@@ -1,16 +1,5 @@
 import { Link } from "react-router-dom";
-import styled, { keyframes } from "styled-components";
-
-const fadeIn = keyframes`
-  from {
-    transform: translateY(-10px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-`;
+import styled from "styled-components";
 
 export const StyledCard = styled.li`
   padding: 1rem 2rem;
@@ -25,11 +14,22 @@ export const StyledCard = styled.li`
   box-shadow: 5px 5px var(--clr-primary);
   transition: border 0.5s ease, box-shadow 0.5s ease, height 0.8s ease;
   opacity: ${(props) => (props.state === "loading" ? 0.5 : 1)};
-  animation: ${fadeIn} 0.5s ease;
+  animation: fadeIn 0.5s ease;
 
   &:hover {
     border: 1px solid var(--clr-secondary);
     box-shadow: 3px 3px var(--clr-secondary);
+  }
+
+  @keyframes fadeIn {
+    from {
+      transform: translateY(-10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
 `;
 
@@ -45,10 +45,13 @@ export const TitleWrapper = styled.div`
 `;
 
 export const PostTitle = styled.h2`
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  line-height: 2.5rem;
-  /* text-decoration: underline var(--clr-secondary) 2px; */
+
+  @media screen and (min-width: 600px) {
+    font-size: 2rem;
+    line-height: 2.5rem;
+  }
 `;
 
 export const AuthorWrapper = styled.div`
@@ -76,6 +79,7 @@ export const PostBody = styled.p`
   border-top: 1px solid var(--clr-primary-light);
   border-bottom: 1px solid var(--clr-primary-light);
   white-space: pre-wrap;
+  word-break: break-all;
 `;
 
 export const TagList = styled.ul`
@@ -106,6 +110,10 @@ export const ReactionsWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 0.75rem;
+
+  @media screen and (max-width: 480px) {
+    justify-content: center;
+  }
 `;
 
 export const StyledReactionButton = styled.button`

@@ -5,7 +5,8 @@ const StyledFooter = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--clr-primary-dark);
+  color: var(--clr-primary-light);
+  font-size: 0.75rem;
   height: 100px;
 `;
 

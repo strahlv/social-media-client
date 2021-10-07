@@ -2,6 +2,10 @@ import React from "react";
 import styled from "styled-components";
 
 const UserInfo = ({ icon, data }) => {
+  if (!data) {
+    return null;
+  }
+
   return (
     <Wrapper>
       {icon}

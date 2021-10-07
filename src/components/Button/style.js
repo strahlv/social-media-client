@@ -8,6 +8,8 @@ export const StyledButton = styled.button`
   cursor: pointer;
   transition: opacity 0.5s;
 
+  background: ${(props) => getColor(props.backgroundColor, "primary")};
+  color: ${(props) => getColor(props.color, "light")};
   ${(props) => props.stretch && "width: 100%;"};
 
   &:hover {
@@ -68,8 +70,6 @@ export const StyledIconButton = styled.button`
   cursor: pointer;
   border: none;
   border-radius: 50%;
-  background: var(--clr-light);
-  color: var(--clr-primary);
   font-size: 1rem;
   font-family: var(--font-poppins);
   transition: background 0.2s ease;
@@ -77,7 +77,6 @@ export const StyledIconButton = styled.button`
   color: ${(props) => getColor(props.color, "primary")};
 
   &:hover {
-    background: var(--clr-secondary-light);
     background: ${(props) => getColor(props.hoverBackgroundColor, "primary")};
     color: ${(props) => getColor(props.hoverColor, "light")};
   }
@@ -93,9 +92,13 @@ export const StyledIconDangerButton = styled(StyledIconButton)`
 `;
 
 const getColor = (color, defaultColor) => {
+  if (!color) {
+    return `var(--clr-${defaultColor})`;
+  }
+
   if (color === "transparent") {
     return color;
   }
-  color = color && `--clr-${color}`;
-  return `var(${color}, ${defaultColor})`;
+
+  return `var(--clr-${color})`;
 };

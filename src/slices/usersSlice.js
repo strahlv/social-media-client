@@ -18,7 +18,7 @@ export const fetchAuthenticatedUser = createAsyncThunk(
   "user/fetchAuthenticatedUser",
   async () => {
     // Fake delay
-    // await delay(1000);
+    await delay(1000);
 
     const res = await api.fetchAuthenticatedUser();
     return res.data;
@@ -27,7 +27,7 @@ export const fetchAuthenticatedUser = createAsyncThunk(
 
 export const fetchUser = createAsyncThunk("user/fetchUser", async (userId) => {
   // Fake delay
-  // await delay(1000);
+  await delay(1000);
 
   const res = await api.fetchUser(userId);
   return res.data;

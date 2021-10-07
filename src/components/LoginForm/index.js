@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import useForm from "../../hooks/useForm";
 import { login } from "../../slices/usersSlice";
-import { PrimaryButton } from "../Button";
+import { Button } from "../Button";
 import Container from "../Container";
 import Form from "../Form";
 import Input from "../Input";
@@ -28,31 +28,29 @@ const LoginForm = () => {
       <Form onSubmit={handleSubmit(handleLogin)}>
         <Input
           type="text"
-          labelText="Username"
-          placeholder="caioba"
+          labelText="Usuário"
           name="username"
           onChange={handleChange}
           value={formValues.username}
         />
         <Input
           type="password"
-          labelText="Password"
-          placeholder="123"
+          labelText="Senha"
           name="password"
           onChange={handleChange}
           value={formValues.password}
         />
-        <PrimaryButton
+        <Button
           type="submit"
           disabled={isLoading}
           stretch
-          color="secondaryAccent"
+          backgroundColor="primary"
         >
-          Login
-        </PrimaryButton>
+          Entrar
+        </Button>
       </Form>
       <p>
-        Doesn't have an account? <Link to="/register">Register now</Link>.
+        Não tem uma conta? <Link to="/register">Inscreva-se</Link>.
       </p>
     </Container>
   );
