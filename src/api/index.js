@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // const API = axios.create({ responseType: "json" });
-const API = axios.create();
+const API = axios.create({ baseURL: process.env.REACT_APP_API_URL });
 const USERS_URL = "/users";
 const POSTS_URL = "/posts";
 
