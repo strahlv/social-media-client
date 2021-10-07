@@ -5,16 +5,16 @@ const StyledContainer = styled.div`
   background: var(--clr-light);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: ${(props) => props.flexJustify || "center"};
+  align-items: ${(props) => props.flexAlign || "center"};
   max-width: 1100px;
   min-height: 100vh;
   margin: auto;
-  padding: 1rem 2rem;
+  padding: 3rem 2rem;
 `;
 
-const Container = ({ children }) => {
-  return <StyledContainer>{children}</StyledContainer>;
+const Container = ({ children, ...rest }) => {
+  return <StyledContainer {...rest}>{children}</StyledContainer>;
 };
 
 export default Container;

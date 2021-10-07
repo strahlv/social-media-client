@@ -13,6 +13,7 @@ export const login = (credentials) =>
 export const logout = () => API.post(`${USERS_URL}/logout`);
 export const fetchAuthenticatedUser = () => API.get(`${USERS_URL}/me`);
 export const fetchUser = (id) => API.get(`${USERS_URL}/${id}`);
+export const fetchUserPosts = (id) => API.get(`${USERS_URL}/${id}/posts`);
 
 // Posts
 export const fetchPosts = () => API.get(POSTS_URL);

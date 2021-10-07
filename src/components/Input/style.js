@@ -1,11 +1,17 @@
 import styled from "styled-components";
 
+export const InputWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
 export const StyledInput = styled.input`
   border: 1px solid var(--clr-primary);
   border-radius: 5px;
   color: var(--clr-dark);
   font-family: var(--font-poppins);
-  font-size: 1rem;
+  font-size: ${(props) => (props.variant !== "title" ? "1rem" : "2rem")};
+  font-weight: ${(props) => (props.variant !== "title" ? "regular" : "bold")};
   width: 100%;
   padding: 0.5rem 1rem;
 
@@ -14,21 +20,22 @@ export const StyledInput = styled.input`
   }
 `;
 
-export const StyledTitleInput = styled(StyledInput)`
-  font-size: 2rem;
-  font-weight: bold;
-`;
-
 export const StyledLabel = styled.label`
   position: absolute;
   font-size: 0.9rem;
+  line-height: 1rem;
   background-color: white;
   top: -10px;
   left: 10px;
-  padding: 5px 2px;
+  padding: 0 2px;
 `;
 
-export const InputWrapper = styled.div`
-  position: relative;
-  width: 100%;
+export const IconWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  right: 1rem;
+  transform: translateY(50%);
+  color: var(--clr-primary);
+  user-select: none;
+  cursor: text;
 `;

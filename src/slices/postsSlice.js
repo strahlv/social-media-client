@@ -23,6 +23,17 @@ export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
   return res.data;
 });
 
+export const fetchUserPosts = createAsyncThunk(
+  "posts/fetchUserPosts",
+  async (userId) => {
+    // Fake delay
+    await delay(1000);
+
+    const res = await api.fetchUserPosts(userId);
+    return res.data;
+  }
+);
+
 export const fetchPost = createAsyncThunk("posts/fetchPost", async (postId) => {
   const res = await api.fetchPost(postId);
   return res.data;
@@ -99,15 +110,29 @@ export const postsSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      // FETCH ALL
+      // FETCH AUTHENTICATED USER'S POSTS
       .addCase(fetchPosts.pending, (state, action) => {
         state.status = "loading";
+        postsAdapter.removeAll(state);
       })
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.status = "succeeded";
         postsAdapter.upsertMany(state, action.payload);
       })
       .addCase(fetchPosts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      // FETCH USER'S POSTS
+      .addCase(fetchUserPosts.pending, (state, action) => {
+        state.status = "loading";
+        postsAdapter.removeAll(state);
+      })
+      .addCase(fetchUserPosts.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        postsAdapter.setAll(state, action.payload);
+      })
+      .addCase(fetchUserPosts.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })

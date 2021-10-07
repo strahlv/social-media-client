@@ -16,17 +16,19 @@ import {
   selectPostById,
   updatePost,
   createComment,
+  selectPostsStatus,
 } from "../../slices/postsSlice";
 import { Menu, MenuItem, MenuItemDanger } from "../Menu";
 import Form from "../Form";
 import Input from "../Input";
 import TextArea from "../TextArea";
-import { IconButton, PrimaryAccentButton, PrimaryButton } from "../Button";
+import { Button, IconButton } from "../Button";
 import useForm from "../../hooks/useForm";
 import { FlexRow } from "../Layout";
 import {
   CommentFormWrapper,
-  PostAuthor,
+  Author,
+  AuthorWrapper,
   PostBody,
   PostHeader,
   PostTitle,
@@ -36,9 +38,11 @@ import {
   StyledReactionButton,
   StyledTag,
   TagList,
+  TitleWrapper,
 } from "./style";
 import CommentList from "../CommentList";
-import { selectUser } from "../../slices/userSlice";
+import { selectCurrentUserId } from "../../slices/usersSlice";
+import Avatar from "../Avatar";
 
 const ReactionButton = ({ icon, value, highlighted, onClick }) => {
   const content = (
@@ -65,29 +69,24 @@ const PostCard = ({ postId }) => {
   const [{ formValues, setFormValues, isLoading }, handleChange, handleSubmit] =
     useForm();
 
-  const user = useSelector(selectUser);
+  const currentUserId = useSelector(selectCurrentUserId);
   const post = useSelector((state) => selectPostById(state, postId));
-  const postsState = useSelector((state) => state.posts);
+  const postsStatus = useSelector(selectPostsStatus);
 
   const [isLiked, setIsLiked] = useState(
-    post.likes?.find((id) => id === user.data._id)
+    post.likes?.find((id) => id === currentUserId)
   );
 
   const [isDisliked, setIsDisliked] = useState(
-    post.dislikes?.find((id) => id === user.data._id)
+    post.dislikes?.find((id) => id === currentUserId)
   );
 
-  const isAuthor = post.author._id === user.data._id;
+  const isAuthor = post.author._id === currentUserId;
 
   // Voltar ao estado ocioso (idle) ao terminar de carregar uma requisição
-  if (postsState.status !== "loading" && cardState === "loading") {
+  if (postsStatus !== "loading" && cardState === "loading") {
     setCardState("idle");
   }
-
-  // Formata tags
-  const tags = post.tags.map((tag, index) => (
-    <StyledTag key={index}>#{tag}</StyledTag>
-  ));
 
   const handleLike = () => {
     dispatch(likePost(post._id));
@@ -149,7 +148,7 @@ const PostCard = ({ postId }) => {
   };
 
   // **************************************
-  // COMMENT FORM
+  // NEW COMMENT FORM
   // **************************************
   const commentForm = cardState === "commenting" && (
     <CommentFormWrapper>
@@ -161,16 +160,17 @@ const PostCard = ({ postId }) => {
           value={formValues.body}
         />
         <FlexRow>
-          <PrimaryButton type="submit" stretch>
-            Comment
-          </PrimaryButton>
-          <PrimaryAccentButton
+          <Button type="submit" stretch backgroundColor="secondary">
+            Comentar
+          </Button>
+          <Button
             type="button"
             onClick={() => setCardState("idle")}
             stretch
+            backgroundColor="primary-accent"
           >
-            Cancel
-          </PrimaryAccentButton>
+            Cancelar
+          </Button>
         </FlexRow>
       </Form>
     </CommentFormWrapper>
@@ -179,27 +179,42 @@ const PostCard = ({ postId }) => {
   // **************************************
   // POST CONTENT
   // **************************************
+  // Formata tags
+  const tags = post.tags.map((tag, index) => (
+    <StyledTag key={index}>#{tag}</StyledTag>
+  ));
+
+  // Botões de like/deslike/comment
+  const postMenu = isAuthor ? (
+    <OutsideClickHandler onOutsideClick={handleOutsideClick}>
+      <IconButton onClick={handleToggleMenu}>
+        <FaEllipsisV />
+      </IconButton>
+      <Menu visible={isMenuOpened}>
+        <MenuItem onClick={handleShowUpdateForm}>
+          <FaEdit /> Editar
+        </MenuItem>
+        <MenuItemDanger onClick={handleDelete}>
+          <FaTrash /> Deletar
+        </MenuItemDanger>
+      </Menu>
+    </OutsideClickHandler>
+  ) : null;
+
   const postContent = (
     <>
       <PostHeader>
-        <PostTitle>{post.title}</PostTitle>
-        <OutsideClickHandler onOutsideClick={handleOutsideClick}>
-          <IconButton onClick={handleToggleMenu}>
-            <FaEllipsisV />
-          </IconButton>
-          <Menu visible={isMenuOpened}>
-            <MenuItem onClick={handleShowUpdateForm}>
-              <FaEdit /> Edit
-            </MenuItem>
-            <MenuItemDanger onClick={handleDelete}>
-              <FaTrash /> Delete
-            </MenuItemDanger>
-          </Menu>
-        </OutsideClickHandler>
+        <TitleWrapper>
+          <PostTitle>{post.title}</PostTitle>
+        </TitleWrapper>
+        {postMenu}
       </PostHeader>
-      <PostAuthor>
-        by {post.author.fullName}, {post.createdAge}
-      </PostAuthor>
+      <AuthorWrapper>
+        <Avatar src="" size="sm" />
+        <Author to={`/users/${post.author._id}`}>
+          por {post.author.fullName}, {post.createdAge}
+        </Author>
+      </AuthorWrapper>
       <PostBody>{post.body}</PostBody>
       <TagList>{tags}</TagList>
       <ReactionsWrapper>
@@ -227,14 +242,14 @@ const PostCard = ({ postId }) => {
   );
 
   // **************************************
-  // EDIT FORM
+  // EDIT POST FORM
   // **************************************
   const editForm = (
     <Form onSubmit={handleSubmit(handleUpdate)}>
       <Input
         type="text"
         name="title"
-        labelText="Title"
+        labelText="Título"
         required
         onChange={handleChange}
         value={formValues.title}
@@ -256,12 +271,21 @@ const PostCard = ({ postId }) => {
         autoComplete="off"
       />
       <FlexRow>
-        <PrimaryButton type="submit" disabled={isLoading} stretch>
-          Save
-        </PrimaryButton>
-        <PrimaryAccentButton onClick={() => setCardState("idle")} stretch>
-          Cancel
-        </PrimaryAccentButton>
+        <Button
+          type="submit"
+          disabled={isLoading}
+          stretch
+          backgroundColor="secondary"
+        >
+          Salvar
+        </Button>
+        <Button
+          onClick={() => setCardState("idle")}
+          stretch
+          backgroundColor="primary-accent"
+        >
+          Cancelar
+        </Button>
       </FlexRow>
     </Form>
   );

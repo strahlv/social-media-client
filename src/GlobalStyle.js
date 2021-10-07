@@ -40,6 +40,14 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 	box-sizing: border-box;
+	line-height: 1.5rem;
+    font-weight: 300;
+	scroll-behavior: smooth;
+
+	&::selection {
+		background: var(--clr-primary-accent);
+		color: var(--clr-light);
+	}
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -55,6 +63,13 @@ body {
     var(--clr-primary) 0%,
     var(--clr-secondary) 100%
   );
+}
+a {
+	color: var(--clr-secondary-accent);
+
+	&:hover {
+	color: var(--clr-secondary);
+	}
 }
 ol, ul {
 	list-style: none;

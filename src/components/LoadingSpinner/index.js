@@ -2,13 +2,13 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 
 const rotate = keyframes`
-from {
+  from {
     transform: rotate(0deg);
-}
+  }
 
-to {
+  to {
     transform: rotate(360deg);
-}
+  }
 `;
 
 const Spinner = styled.div`

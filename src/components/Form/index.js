@@ -11,8 +11,12 @@ const StyledForm = styled.form`
   max-width: 600px;
 `;
 
-const Form = ({ onSubmit, children }) => {
-  return <StyledForm onSubmit={onSubmit}>{children}</StyledForm>;
+const Form = ({ onSubmit, children, ...rest }) => {
+  return (
+    <StyledForm onSubmit={onSubmit} {...rest}>
+      {children}
+    </StyledForm>
+  );
 };
 
 export default Form;

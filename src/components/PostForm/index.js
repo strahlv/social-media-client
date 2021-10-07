@@ -1,17 +1,31 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import styled from "styled-components";
 import useForm from "../../hooks/useForm";
 import { createPost } from "../../slices/postsSlice";
-import { SecondaryButton } from "../Button";
+import { Button } from "../Button";
 import Form from "../Form";
 import Input from "../Input";
 import TextArea from "../TextArea";
 
+const StyledForm = styled(Form)`
+  margin-bottom: 5rem;
+  animation: fadeIn 1s ease;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+`;
+
 const PostForm = () => {
   const dispatch = useDispatch();
 
-  const [{ formValues, setFormValues, isLoading }, handleChange, handleSubmit] =
-    useForm();
+  const [{ formValues, isLoading }, handleChange, handleSubmit] = useForm();
 
   const handleCreatePost = () => {
     const newPost = { ...formValues };
@@ -21,18 +35,18 @@ const PostForm = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit(handleCreatePost)}>
+    <StyledForm onSubmit={handleSubmit(handleCreatePost)}>
       <Input
         type="text"
         name="title"
         id="title"
-        labelText="Title"
+        labelText="Título"
         required
         onChange={handleChange}
         value={formValues.title}
         autoComplete="off"
         variant="title"
-        placeholder="What's on your mind?"
+        placeholder="Tem algo a dizer?"
       />
       <TextArea
         name="body"
@@ -49,12 +63,17 @@ const PostForm = () => {
         onChange={handleChange}
         value={formValues.tags}
         autoComplete="off"
-        placeholder="separate tags by space no hashtags needed"
+        placeholder="separar múltiplas tags por espaço sem colocar hashtags"
       />
-      <SecondaryButton type="submit" disabled={isLoading} stretch>
-        Post
-      </SecondaryButton>
-    </Form>
+      <Button
+        type="submit"
+        disabled={isLoading}
+        stretch
+        backgroundColor="secondary"
+      >
+        Publicar
+      </Button>
+    </StyledForm>
   );
 };
 

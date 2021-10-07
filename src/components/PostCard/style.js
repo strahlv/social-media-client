@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const StyledCard = styled.li`
@@ -11,12 +12,24 @@ export const StyledCard = styled.li`
   border-radius: 5px;
   border: 1px solid var(--clr-primary);
   box-shadow: 5px 5px var(--clr-primary);
-  transition: border 0.5s ease, box-shadow 0.5s ease;
+  transition: border 0.5s ease, box-shadow 0.5s ease, height 0.8s ease;
   opacity: ${(props) => (props.state === "loading" ? 0.5 : 1)};
+  animation: fadeIn 0.5s ease;
 
   &:hover {
     border: 1px solid var(--clr-secondary);
-    box-shadow: 5px 5px var(--clr-secondary);
+    box-shadow: 3px 3px var(--clr-secondary);
+  }
+
+  @keyframes fadeIn {
+    from {
+      transform: translateY(-10px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
 `;
 
@@ -27,27 +40,46 @@ export const PostHeader = styled.header`
   margin-bottom: 1rem;
 `;
 
-export const PostTitle = styled.h2`
-  font-size: 2rem;
-  font-weight: bold;
-  line-height: 2.5rem;
-  text-decoration: underline wavy var(--clr-secondary);
+export const TitleWrapper = styled.div`
+  width: 100%;
 `;
 
-export const PostAuthor = styled.p`
+export const PostTitle = styled.h2`
+  font-size: 1.5rem;
+  font-weight: bold;
+
+  @media screen and (min-width: 600px) {
+    font-size: 2rem;
+    line-height: 2.5rem;
+  }
+`;
+
+export const AuthorWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+`;
+
+export const Author = styled(Link)`
   color: var(--clr-secondary-accent);
   font-style: italic;
   font-size: 0.8rem;
-  margin-bottom: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--clr-secondary);
+  }
 `;
+
+export const PostAge = styled.p``;
 
 export const PostBody = styled.p`
   padding: 2rem 0;
   margin-bottom: 1rem;
-  line-height: 1.5rem;
   border-top: 1px solid var(--clr-primary-light);
   border-bottom: 1px solid var(--clr-primary-light);
   white-space: pre-wrap;
+  word-break: break-all;
 `;
 
 export const TagList = styled.ul`
@@ -63,9 +95,13 @@ export const StyledTag = styled.li`
   color: var(--clr-secondary-accent);
   padding: 0 5px;
   cursor: pointer;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  transition: color 0.2s ease, border 0.2s ease;
 
   &:hover {
     border: 1px solid var(--clr-primary-accent);
+    font-style: italic;
     color: var(--clr-primary-accent);
   }
 `;
@@ -74,6 +110,10 @@ export const ReactionsWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 0.75rem;
+
+  @media screen and (max-width: 480px) {
+    justify-content: center;
+  }
 `;
 
 export const StyledReactionButton = styled.button`

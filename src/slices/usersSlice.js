@@ -1,12 +1,18 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createEntityAdapter,
+  createSlice,
+} from "@reduxjs/toolkit";
 import * as api from "../api";
 import { delay } from "../utils";
 
-const initialState = {
-  data: null,
-  status: "idle",
+const usersAdapter = createEntityAdapter();
+
+const initialState = usersAdapter.getInitialState({
+  currentUser: null,
+  status: "loading",
   error: null,
-};
+});
 
 export const fetchAuthenticatedUser = createAsyncThunk(
   "user/fetchAuthenticatedUser",
@@ -18,6 +24,14 @@ export const fetchAuthenticatedUser = createAsyncThunk(
     return res.data;
   }
 );
+
+export const fetchUser = createAsyncThunk("user/fetchUser", async (userId) => {
+  // Fake delay
+  await delay(1000);
+
+  const res = await api.fetchUser(userId);
+  return res.data;
+});
 
 export const login = createAsyncThunk("user/login", async (credentials) => {
   const res = await api.login(credentials);
@@ -39,55 +53,80 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
+      // ************************************************************
+      // FETCH AUTHENTICATED USER
+      // ************************************************************
       .addCase(fetchAuthenticatedUser.pending, (state, action) => {
         state.status = "loading";
       })
       .addCase(fetchAuthenticatedUser.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload;
         state.error = null;
+        state.currentUser = action.payload._id;
+        usersAdapter.upsertOne(state, action.payload);
       })
       .addCase(fetchAuthenticatedUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })
+      // ************************************************************
+      // FETCH ONE USER
+      // ************************************************************
+      .addCase(fetchUser.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(fetchUser.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = null;
+        usersAdapter.upsertOne(state, action.payload);
+      })
+      .addCase(fetchUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      // ************************************************************
+      // LOGIN
+      // ************************************************************
       .addCase(login.pending, (state, action) => {
         state.status = "loading";
       })
       .addCase(login.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload;
         state.error = null;
+        state.currentUser = action.payload._id;
+        usersAdapter.upsertOne(state, action.payload);
       })
       .addCase(login.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })
+      // ************************************************************
+      // LOGOUT
+      // ************************************************************
       .addCase(logout.pending, (state, action) => {
         state.status = "loading";
       })
       .addCase(logout.fulfilled, (state, action) => {
         state.status = "succeeded";
-        // state = {
-        //   data: null,
-        //   status: "idle",
-        //   error: null,
-        // };
-        state.data = null;
-        state.status = "idle";
         state.error = null;
+        state.currentUser = null;
+        usersAdapter.removeOne(state, action.payload);
       })
       .addCase(logout.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })
+      // ************************************************************
+      // CREATE USER / REGISTER
+      // ************************************************************
       .addCase(register.pending, (state, action) => {
         state.status = "loading";
       })
       .addCase(register.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload;
         state.error = null;
+        state.currentUser = action.payload;
+        usersAdapter.addOne(state, action.payload);
       })
       .addCase(register.rejected, (state, action) => {
         state.status = "failed";
@@ -96,6 +135,13 @@ export const userSlice = createSlice({
   },
 });
 
-export const selectUser = (state) => state.user;
+export const {
+  selectAll: selectAllUsers,
+  selectById: selectUserById,
+  selectIds: selectUsersIds,
+} = usersAdapter.getSelectors((state) => state.users);
+
+export const selectUsersState = (state) => state.users;
+export const selectCurrentUserId = (state) => state.users.currentUser;
 
 export default userSlice.reducer;
