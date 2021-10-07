@@ -9,8 +9,7 @@ import Form from "../Form";
 import Input from "../Input";
 
 const RegisterForm = () => {
-  const [{ formValues, setFormValues, isLoading }, handleChange, handleSubmit] =
-    useForm();
+  const [{ formValues, isLoading }, handleChange, handleSubmit] = useForm();
   const dispatch = useDispatch();
   const history = useHistory();
 

@@ -15,7 +15,7 @@ const useForm = (initialState = {}) => {
 
     const clearForm = () => {
       const emptyValues = { ...formValues };
-      for (const [key, value] of Object.entries(emptyValues)) {
+      for (const [key] of Object.entries(emptyValues)) {
         emptyValues[key] = "";
       }
       setFormValues(emptyValues);
