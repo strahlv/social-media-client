@@ -15,10 +15,10 @@ const Navbar = () => {
   const history = useHistory();
   const currentUserId = useSelector(selectCurrentUserId);
 
-  const [isMobile, setIsMobile] = useState(false);
-
   const mobileBreakpoint = 600;
   const mql = window.matchMedia(`(max-width: ${mobileBreakpoint}px)`);
+
+  const [isMobile, setIsMobile] = useState(mql.matches);
 
   useEffect(() => {
     mql.addEventListener("change", (evt) => setIsMobile(evt.matches));
