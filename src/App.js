@@ -9,6 +9,7 @@ import RegisterForm from "./components/RegisterForm";
 import UserPage from "./components/UserPage";
 import Footer from "./components/Footer";
 import { fetchAuthenticatedUser, selectUsersState } from "./slices/usersSlice";
+import Container from "./components/Container";
 
 function App() {
   const dispatch = useDispatch();
@@ -26,6 +27,8 @@ function App() {
   return (
     <div>
       <Switch>
+        <h1>Cans you read this?</h1>
+        <Container>How about this?</Container>
         <PrivateRoute exact path="/" component={HomePage} />
         <Route exact path="/login" component={LoginForm} />
         <Route exact path="/register" component={RegisterForm} />
