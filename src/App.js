@@ -27,8 +27,6 @@ function App() {
   return (
     <>
       <Switch>
-        <h1>Can you read this?</h1>
-        <Container>How about this?</Container>
         <PrivateRoute exact path="/" component={HomePage} />
         <Route exact path="/login" component={LoginForm} />
         <Route exact path="/register" component={RegisterForm} />
