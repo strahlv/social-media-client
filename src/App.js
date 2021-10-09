@@ -9,7 +9,6 @@ import RegisterForm from "./components/RegisterForm";
 import UserPage from "./components/UserPage";
 import Footer from "./components/Footer";
 import { fetchAuthenticatedUser, selectUsersState } from "./slices/usersSlice";
-import Container from "./components/Container";
 
 function App() {
   const dispatch = useDispatch();
