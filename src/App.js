@@ -25,9 +25,9 @@ function App() {
   }
 
   return (
-    <div>
+    <>
       <Switch>
-        <h1>Cans you read this?</h1>
+        <h1>Can you read this?</h1>
         <Container>How about this?</Container>
         <PrivateRoute exact path="/" component={HomePage} />
         <Route exact path="/login" component={LoginForm} />
@@ -35,7 +35,7 @@ function App() {
         <PrivateRoute exact path="/users/:userId" component={UserPage} />
       </Switch>
       <Footer />
-    </div>
+    </>
   );
 }
 
