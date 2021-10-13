@@ -1,12 +1,18 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
+import styled from "styled-components";
 import useForm from "../../hooks/useForm";
 import { register } from "../../slices/usersSlice";
 import { Button } from "../Button";
 import Container from "../Container";
 import Form from "../Form";
 import Input from "../Input";
+import Title from "../Title";
+
+const StyledText = styled.p`
+  margin-top: 2rem;
+`;
 
 const RegisterForm = () => {
   const [{ formValues, isLoading }, handleChange, handleSubmit] = useForm();
@@ -15,7 +21,7 @@ const RegisterForm = () => {
 
   const handleRegister = () => {
     if (formValues.password === formValues.confirmPassword) {
-      // todo: remove confirmPassword from object
+      delete formValues.confirmPassword;
       dispatch(register(formValues));
       history.push("/");
     }
@@ -23,6 +29,9 @@ const RegisterForm = () => {
 
   return (
     <Container>
+      <Title>
+        re<span>gistre-se</span>
+      </Title>
       <Form onSubmit={handleSubmit(handleRegister)}>
         <Input
           type="text"
@@ -82,9 +91,9 @@ const RegisterForm = () => {
           Inscrever-se
         </Button>
       </Form>
-      <p>
+      <StyledText>
         Já possui uma conta? <Link to="/login">Entrar</Link>.
-      </p>
+      </StyledText>
     </Container>
   );
 };

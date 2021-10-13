@@ -9,6 +9,7 @@ import RegisterForm from "./components/RegisterForm";
 import UserPage from "./components/UserPage";
 import Footer from "./components/Footer";
 import { fetchAuthenticatedUser, selectUsersState } from "./slices/usersSlice";
+import NotFoundPage from "./components/NotFoundPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ function App() {
         <Route exact path="/login" component={LoginForm} />
         <Route exact path="/register" component={RegisterForm} />
         <PrivateRoute exact path="/users/:userId" component={UserPage} />
+        <Route path="/" component={NotFoundPage} />
       </Switch>
       <Footer />
     </>

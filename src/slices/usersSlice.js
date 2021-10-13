@@ -18,7 +18,7 @@ export const fetchAuthenticatedUser = createAsyncThunk(
   "user/fetchAuthenticatedUser",
   async () => {
     // Fake delay
-    await delay(1000);
+    await delay(500);
 
     const res = await api.fetchAuthenticatedUser();
     return res.data;
@@ -27,7 +27,7 @@ export const fetchAuthenticatedUser = createAsyncThunk(
 
 export const fetchUser = createAsyncThunk("user/fetchUser", async (userId) => {
   // Fake delay
-  await delay(1000);
+  await delay(500);
 
   const res = await api.fetchUser(userId);
   return res.data;
@@ -125,7 +125,7 @@ export const userSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.error = null;
-        state.currentUser = action.payload;
+        state.currentUser = action.payload._id;
         usersAdapter.addOne(state, action.payload);
       })
       .addCase(register.rejected, (state, action) => {

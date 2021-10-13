@@ -1,12 +1,18 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
+import styled from "styled-components";
 import useForm from "../../hooks/useForm";
 import { login } from "../../slices/usersSlice";
 import { Button } from "../Button";
 import Container from "../Container";
 import Form from "../Form";
 import Input from "../Input";
+import Title from "../Title";
+
+const StyledText = styled.p`
+  margin-top: 2rem;
+`;
 
 const LoginForm = () => {
   const [{ formValues, isLoading }, handleChange, handleSubmit] = useForm();
@@ -25,6 +31,9 @@ const LoginForm = () => {
 
   return (
     <Container>
+      <Title>
+        re<span>markz</span>
+      </Title>
       <Form onSubmit={handleSubmit(handleLogin)}>
         <Input
           type="text"
@@ -49,9 +58,9 @@ const LoginForm = () => {
           Entrar
         </Button>
       </Form>
-      <p>
+      <StyledText>
         Não tem uma conta? <Link to="/register">Inscreva-se</Link>.
-      </p>
+      </StyledText>
     </Container>
   );
 };

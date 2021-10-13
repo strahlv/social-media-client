@@ -8,7 +8,8 @@ const StyledContainer = styled.div`
   justify-content: ${(props) => props.flexJustify || "center"};
   align-items: ${(props) => props.flexAlign || "center"};
   max-width: 1100px;
-  min-height: 100vh;
+  --footer-size: 100px;
+  min-height: calc(100vh - var(--footer-size));
   margin: auto;
   padding: 3rem 2rem;
 `;

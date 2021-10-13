@@ -5,7 +5,7 @@ import Container from "../Container";
 import Navbar from "../Navbar";
 import PostForm from "../PostForm";
 import PostList from "../PostList";
-import { WelcomeTitle } from "./style";
+import Title from "../Title";
 
 const HomePage = () => {
   const currentUserId = useSelector(selectCurrentUserId);
@@ -14,7 +14,9 @@ const HomePage = () => {
   if (!user) {
     return (
       <Container>
-        <WelcomeTitle>Oops...</WelcomeTitle>
+        <Title>
+          Oops... <span>algo deu errado</span>. :(
+        </Title>
       </Container>
     );
   }
@@ -23,9 +25,9 @@ const HomePage = () => {
     <>
       <Navbar />
       <Container flexJustify="flex-start">
-        <WelcomeTitle>
+        <Title>
           Olá <span>{user.firstName}</span>! ;)
-        </WelcomeTitle>
+        </Title>
         <PostForm />
         <PostList />
       </Container>
