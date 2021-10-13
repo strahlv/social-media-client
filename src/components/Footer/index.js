@@ -7,7 +7,7 @@ const StyledFooter = styled.div`
   align-items: center;
   color: var(--clr-primary-light);
   font-size: 0.75rem;
-  height: 100px;
+  height: var(--footer-height);
 `;
 
 const Footer = () => {

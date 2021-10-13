@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
 import {
   fetchPosts,
   fetchUserPosts,
@@ -9,17 +8,7 @@ import {
 } from "../../slices/postsSlice";
 import LoadingSpinner from "../LoadingSpinner";
 import PostCard from "../PostCard";
-
-const StyledList = styled.ul`
-  flex-grow: 1;
-  background: var(--clr-light);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  width: 100%;
-`;
+import { StyledList } from "./style";
 
 const PostList = ({ userId }) => {
   const dispatch = useDispatch();
@@ -46,7 +35,7 @@ const PostList = ({ userId }) => {
       return <PostCard key={postId} userId={userId} postId={postId} />;
     });
   } else if (postsStatus !== "loading") {
-    items = <p>Este usuário ainda não publicou nada.</p>;
+    items = <p>Este usuário ainda não possui publicações.</p>;
   }
 
   return <StyledList>{items}</StyledList>;

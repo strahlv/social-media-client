@@ -2,16 +2,14 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledContainer = styled.div`
-  background: ${(props) => props.color || "var(--clr-light)"};
   display: flex;
   flex-direction: column;
-  justify-content: ${(props) => props.flexJustify || "center"};
-  align-items: ${(props) => props.flexAlign || "center"};
+  justify-content: center;
+  align-items: center;
   max-width: 1100px;
-  --footer-size: 100px;
-  min-height: calc(100vh - var(--footer-size));
+  min-height: calc(100vh - var(--footer-height));
   margin: auto;
-  padding: 3rem 2rem;
+  background: ${(props) => props.color || "var(--clr-light)"};
 `;
 
 const Container = ({ children, ...rest }) => {

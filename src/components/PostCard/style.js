@@ -79,7 +79,6 @@ export const PostBody = styled.p`
   border-top: 1px solid var(--clr-primary-light);
   border-bottom: 1px solid var(--clr-primary-light);
   white-space: pre-wrap;
-  word-break: break-all;
 `;
 
 export const TagList = styled.ul`

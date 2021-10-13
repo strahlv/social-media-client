@@ -13,6 +13,7 @@ const Style = createGlobalStyle`
 	--clr-light: #ffffff;
 	--clr-dark: #300660;
 	--font-poppins: "Poppins";
+	--footer-height: 100px;
 }
 
 /* http://meyerweb.com/eric/tools/css/reset/

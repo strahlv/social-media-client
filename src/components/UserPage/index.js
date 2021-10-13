@@ -47,7 +47,7 @@ const UserPage = () => {
   return (
     <>
       <Navbar />
-      <Container flexJustify="flex-start" color="transparent">
+      <Container color="transparent">
         <UserProfile>
           <Avatar size="xl" />
           <UserFullName>{user.fullName}</UserFullName>

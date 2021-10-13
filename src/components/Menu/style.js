@@ -1,15 +1,4 @@
-import styled, { keyframes } from "styled-components";
-
-const fadeIn = keyframes`
-  from {
-    top: 0;
-    opacity: 0;
-  }
-  to {
-    top: 0.5rem;
-    opacity: 1;
-  }
-`;
+import styled from "styled-components";
 
 export const StyledMenuContainer = styled.div`
   align-self: flex-start;
@@ -20,7 +9,7 @@ export const StyledMenuContainer = styled.div`
 export const StyledMenuItems = styled.div`
   position: absolute;
   top: 0.5rem;
-  left: calc(-100px + 16px);
+  right: -50px;
   width: 200px;
   display: flex;
   flex-direction: column;
@@ -29,5 +18,20 @@ export const StyledMenuItems = styled.div`
   border-radius: 5px;
   box-shadow: 5px 5px var(--clr-primary);
   overflow: hidden;
-  animation: ${fadeIn} 0.2s ease;
+  animation: fadeIn 0.2s ease;
+
+  @keyframes fadeIn {
+    from {
+      top: 0;
+      opacity: 0;
+    }
+    to {
+      top: 0.5rem;
+      opacity: 1;
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    left: calc(-100px + 16px);
+  }
 `;

@@ -9,7 +9,6 @@ import Input from "../Input";
 import TextArea from "../TextArea";
 
 const StyledForm = styled(Form)`
-  margin-bottom: 5rem;
   animation: fadeIn 1s ease;
 
   @keyframes fadeIn {

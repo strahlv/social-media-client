@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentUserId, selectUserById } from "../../slices/usersSlice";
 import Container from "../Container";
+import { FlexCol } from "../Layout";
 import Navbar from "../Navbar";
 import PostForm from "../PostForm";
 import PostList from "../PostList";
@@ -25,10 +26,12 @@ const HomePage = () => {
     <>
       <Navbar />
       <Container flexJustify="flex-start">
-        <Title>
-          Olá <span>{user.firstName}</span>! ;)
-        </Title>
-        <PostForm />
+        <FlexCol align="center" padding="3rem 2rem">
+          <Title>
+            Olá <span>{user.firstName}</span>! ;)
+          </Title>
+          <PostForm />
+        </FlexCol>
         <PostList />
       </Container>
     </>

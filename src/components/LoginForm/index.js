@@ -8,6 +8,7 @@ import { Button } from "../Button";
 import Container from "../Container";
 import Form from "../Form";
 import Input from "../Input";
+import { FlexCol } from "../Layout";
 import Title from "../Title";
 
 const StyledText = styled.p`
@@ -31,36 +32,38 @@ const LoginForm = () => {
 
   return (
     <Container>
-      <Title>
-        re<span>markz</span>
-      </Title>
-      <Form onSubmit={handleSubmit(handleLogin)}>
-        <Input
-          type="text"
-          labelText="Usuário"
-          name="username"
-          onChange={handleChange}
-          value={formValues.username}
-        />
-        <Input
-          type="password"
-          labelText="Senha"
-          name="password"
-          onChange={handleChange}
-          value={formValues.password}
-        />
-        <Button
-          type="submit"
-          disabled={isLoading}
-          stretch
-          backgroundColor="primary"
-        >
-          Entrar
-        </Button>
-      </Form>
-      <StyledText>
-        Não tem uma conta? <Link to="/register">Inscreva-se</Link>.
-      </StyledText>
+      <FlexCol align="center" padding="3rem 2rem">
+        <Title>
+          re<span>markz</span>
+        </Title>
+        <Form onSubmit={handleSubmit(handleLogin)}>
+          <Input
+            type="text"
+            labelText="Usuário"
+            name="username"
+            onChange={handleChange}
+            value={formValues.username}
+          />
+          <Input
+            type="password"
+            labelText="Senha"
+            name="password"
+            onChange={handleChange}
+            value={formValues.password}
+          />
+          <Button
+            type="submit"
+            disabled={isLoading}
+            stretch
+            backgroundColor="primary"
+          >
+            Entrar
+          </Button>
+        </Form>
+        <StyledText>
+          Não tem uma conta? <Link to="/register">Inscreva-se</Link>.
+        </StyledText>
+      </FlexCol>
     </Container>
   );
 };
