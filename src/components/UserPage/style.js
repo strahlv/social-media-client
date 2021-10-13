@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Container from "../Container";
 
 export const UserProfile = styled.section`
   display: flex;
@@ -41,4 +42,8 @@ export const UserInfoWrapper = styled.div`
     gap: 0.5rem;
     /* flex-direction: column; */
   }
+`;
+
+export const PostsContainer = styled(Container)`
+  min-height: 0;
 `;

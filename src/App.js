@@ -8,13 +8,13 @@ import PrivateRoute from "./components/PrivateRoute";
 import RegisterForm from "./components/RegisterForm";
 import UserPage from "./components/UserPage";
 import Footer from "./components/Footer";
-import { fetchAuthenticatedUser, selectUsersState } from "./slices/usersSlice";
+import { fetchAuthenticatedUser, selectUsers } from "./slices/usersSlice";
 import NotFoundPage from "./components/NotFoundPage";
 
 function App() {
   const dispatch = useDispatch();
 
-  const user = useSelector(selectUsersState);
+  const user = useSelector(selectUsers);
 
   useEffect(() => {
     dispatch(fetchAuthenticatedUser());

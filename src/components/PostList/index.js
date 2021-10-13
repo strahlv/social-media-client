@@ -7,6 +7,7 @@ import {
   selectPostsIds,
   selectPostsStatus,
 } from "../../slices/postsSlice";
+import { selectUserById } from "../../slices/usersSlice";
 import LoadingSpinner from "../LoadingSpinner";
 import PostCard from "../PostCard";
 
@@ -24,6 +25,7 @@ const PostList = ({ userId }) => {
 
   const postsStatus = useSelector(selectPostsStatus);
   const postsIds = useSelector(selectPostsIds);
+  const user = useSelector(selectUserById(userId));
 
   useEffect(() => {
     if (userId) {
@@ -33,7 +35,7 @@ const PostList = ({ userId }) => {
     }
   }, [dispatch, userId]);
 
-  if (postsStatus === "error") {
+  if (postsStatus === "failed") {
     return <p>Oops...</p>;
   }
 
@@ -43,6 +45,8 @@ const PostList = ({ userId }) => {
     items = postsIds.map((postId) => {
       return <PostCard key={postId} userId={userId} postId={postId} />;
     });
+  } else if (postsStatus !== "loading") {
+    items = <p>{user.firstName} ainda não publicou nada.</p>;
   }
 
   return <StyledList>{items}</StyledList>;

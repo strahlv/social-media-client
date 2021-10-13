@@ -141,7 +141,8 @@ export const {
   selectIds: selectUsersIds,
 } = usersAdapter.getSelectors((state) => state.users);
 
-export const selectUsersState = (state) => state.users;
+export const selectUsers = (state) => state.users;
+export const selectUsersStatus = (state) => state.users.status;
 export const selectCurrentUserId = (state) => state.users.currentUser;
 
 export default userSlice.reducer;

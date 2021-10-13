@@ -2,33 +2,44 @@ import React, { useEffect } from "react";
 import { FaBirthdayCake, FaCommentAlt, FaMapMarkerAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 import {
   fetchUser,
   selectUserById,
-  selectUsersState,
+  selectUsers,
 } from "../../slices/usersSlice";
 import Avatar from "../Avatar";
-import Container from "../Container";
 import Navbar from "../Navbar";
 import PostList from "../PostList";
 import UserInfo from "../UserInfo";
-import { UserBio, UserFullName, UserInfoWrapper, UserProfile } from "./style";
+import {
+  PostsContainer,
+  UserBio,
+  UserFullName,
+  UserInfoWrapper,
+  UserProfile,
+} from "./style";
 
 const UserPage = () => {
   let { userId } = useParams();
   const dispatch = useDispatch();
 
-  const usersState = useSelector(selectUsersState);
+  const usersState = useSelector(selectUsers);
   const user = useSelector((state) => selectUserById(state, userId));
 
   useEffect(() => {
-    if (!user) {
+    if (!user && usersState !== "failed") {
       dispatch(fetchUser(userId));
     }
-  }, [dispatch, userId, user]);
+  }, [dispatch, userId, user, usersState]);
 
-  if (usersState.status === "failed") {
-    return <h1>Error, I guess... :(</h1>;
+  if (usersState === "failed") {
+    return (
+      <>
+        <p>Oops... {usersState.error}</p>
+        <Link to="/">Voltar à página principal.</Link>
+      </>
+    );
   }
 
   if (!user) {
@@ -51,9 +62,9 @@ const UserPage = () => {
           <UserInfo icon={<FaMapMarkerAlt />} data={user.location || null} />
         </UserInfoWrapper>
       </UserProfile>
-      <Container flexJustify="flex-start">
+      <PostsContainer flexJustify="flex-start">
         <PostList userId={userId} />
-      </Container>
+      </PostsContainer>
     </>
   );
 };
