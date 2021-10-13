@@ -9,6 +9,7 @@ import {
   selectUsers,
 } from "../../slices/usersSlice";
 import Avatar from "../Avatar";
+import Container from "../Container";
 import Navbar from "../Navbar";
 import PostList from "../PostList";
 import UserInfo from "../UserInfo";
@@ -52,19 +53,21 @@ const UserPage = () => {
   return (
     <>
       <Navbar />
-      <UserProfile>
-        <Avatar size="xl" />
-        <UserFullName>{user.fullName}</UserFullName>
-        <UserBio>{user.bio || null}</UserBio>
-        <UserInfoWrapper>
-          <UserInfo icon={<FaCommentAlt />} data={postCount || null} />
-          <UserInfo icon={<FaBirthdayCake />} data={birthday || null} />
-          <UserInfo icon={<FaMapMarkerAlt />} data={user.location || null} />
-        </UserInfoWrapper>
-      </UserProfile>
-      <PostsContainer flexJustify="flex-start">
-        <PostList userId={userId} />
-      </PostsContainer>
+      <Container flexJustify="flex-start" color="transparent">
+        <UserProfile>
+          <Avatar size="xl" />
+          <UserFullName>{user.fullName}</UserFullName>
+          <UserBio>{user.bio || null}</UserBio>
+          <UserInfoWrapper>
+            <UserInfo icon={<FaCommentAlt />} data={postCount || null} />
+            <UserInfo icon={<FaBirthdayCake />} data={birthday || null} />
+            <UserInfo icon={<FaMapMarkerAlt />} data={user.location || null} />
+          </UserInfoWrapper>
+        </UserProfile>
+        <PostsContainer flexJustify="flex-start">
+          <PostList userId={userId} />
+        </PostsContainer>
+      </Container>
     </>
   );
 };

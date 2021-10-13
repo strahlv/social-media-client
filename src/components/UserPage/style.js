@@ -45,5 +45,6 @@ export const UserInfoWrapper = styled.div`
 `;
 
 export const PostsContainer = styled(Container)`
+  padding: 3rem 2rem;
   min-height: 0;
 `;
