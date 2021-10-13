@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Container from "../Container";
 
 export const UserProfile = styled.section`
   display: flex;
@@ -40,11 +39,5 @@ export const UserInfoWrapper = styled.div`
   @media screen and (max-width: 480px) {
     flex-wrap: wrap;
     gap: 0.5rem;
-    /* flex-direction: column; */
   }
-`;
-
-export const PostsContainer = styled(Container)`
-  padding: 3rem 2rem;
-  min-height: 0;
 `;

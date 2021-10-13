@@ -11,6 +11,7 @@ const StyledContainer = styled.div`
   --footer-size: 100px;
   min-height: calc(100vh - var(--footer-size));
   margin: auto;
+  padding: 3rem 2rem;
 `;
 
 const Container = ({ color, children, ...rest }) => {

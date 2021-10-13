@@ -13,13 +13,7 @@ import Container from "../Container";
 import Navbar from "../Navbar";
 import PostList from "../PostList";
 import UserInfo from "../UserInfo";
-import {
-  PostsContainer,
-  UserBio,
-  UserFullName,
-  UserInfoWrapper,
-  UserProfile,
-} from "./style";
+import { UserBio, UserFullName, UserInfoWrapper, UserProfile } from "./style";
 
 const UserPage = () => {
   let { userId } = useParams();
@@ -64,9 +58,7 @@ const UserPage = () => {
             <UserInfo icon={<FaMapMarkerAlt />} data={user.location || null} />
           </UserInfoWrapper>
         </UserProfile>
-        <PostsContainer flexJustify="flex-start">
-          <PostList userId={userId} />
-        </PostsContainer>
+        <PostList userId={userId} />
       </Container>
     </>
   );
