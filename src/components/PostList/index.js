@@ -11,6 +11,7 @@ import LoadingSpinner from "../LoadingSpinner";
 import PostCard from "../PostCard";
 
 const StyledList = styled.ul`
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;

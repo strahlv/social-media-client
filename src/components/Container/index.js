@@ -14,7 +14,7 @@ const StyledContainer = styled.div`
   padding: 3rem 2rem;
 `;
 
-const Container = ({ color, children, ...rest }) => {
+const Container = ({ children, ...rest }) => {
   return <StyledContainer {...rest}>{children}</StyledContainer>;
 };
 
