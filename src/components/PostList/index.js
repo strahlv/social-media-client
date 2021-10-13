@@ -12,6 +12,7 @@ import PostCard from "../PostCard";
 
 const StyledList = styled.ul`
   flex-grow: 1;
+  background: var(--clr-light);
   display: flex;
   flex-direction: column;
   justify-content: center;
